@@ -24,7 +24,6 @@ public section.
       !I_GRAPHICSPARENT type ref to CL_GUI_CONTAINER optional
       value(I_NAME) type STRING optional
       !I_FCAT_COMPLETE type SAP_BOOL default SPACE
-      !O_PREVIOUS_SRAL_HANDLER type ref to IF_SALV_GUI_SRAL_HANDLER optional
     exceptions
       ERROR_CNTL_CREATE
       ERROR_CNTL_INIT
@@ -79,8 +78,7 @@ CLASS YCL_GUI_ALV_GRID IMPLEMENTATION.
                         i_applogparent          = i_applogparent
                         i_graphicsparent        = i_graphicsparent
                         i_name                  = i_name
-                        i_fcat_complete         = i_fcat_complete
-                        o_previous_sral_handler = o_previous_sral_handler ).
+                        i_fcat_complete         = i_fcat_complete ).
 
     outtab = mt_outtab.
 
