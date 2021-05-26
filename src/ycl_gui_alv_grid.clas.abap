@@ -1,0 +1,180 @@
+class YCL_GUI_ALV_GRID definition
+  public
+  inheriting from CL_GUI_ALV_GRID
+  final
+  create public
+
+  global friends YCL_TALV_PARENT .
+
+public section.
+
+  events GRID_DISPATCH
+    exporting
+      value(ACTION) type SY-UCOMM .
+
+  methods CONSTRUCTOR
+    importing
+      value(TALV) type ref to YCL_TALV_PARENT
+      value(I_SHELLSTYLE) type I default 0
+      value(I_LIFETIME) type I optional
+      value(I_PARENT) type ref to CL_GUI_CONTAINER
+      value(I_APPL_EVENTS) type CHAR01 default SPACE
+      !I_PARENTDBG type ref to CL_GUI_CONTAINER optional
+      !I_APPLOGPARENT type ref to CL_GUI_CONTAINER optional
+      !I_GRAPHICSPARENT type ref to CL_GUI_CONTAINER optional
+      value(I_NAME) type STRING optional
+      !I_FCAT_COMPLETE type SAP_BOOL default SPACE
+      !O_PREVIOUS_SRAL_HANDLER type ref to IF_SALV_GUI_SRAL_HANDLER optional
+    exceptions
+      ERROR_CNTL_CREATE
+      ERROR_CNTL_INIT
+      ERROR_CNTL_LINK
+      ERROR_DP_CREATE .
+  methods READY_FOR_IT
+    importing
+      value(I_BUFFER_ACTIVE) type ANY optional
+      value(I_BYPASSING_BUFFER) type CHAR01 optional
+      value(I_CONSISTENCY_CHECK) type CHAR1 optional
+      value(I_STRUCTURE_NAME) type DD02L-TABNAME optional
+      value(I_SAVE) type CHAR01 default 'A'
+      value(I_DEFAULT) type CHAR01 default 'X'
+      value(IS_PRINT) type LVC_S_PRNT optional
+      value(IT_SPECIAL_GROUPS) type LVC_T_SGRP optional
+      value(IT_TOOLBAR_EXCLUDING) type UI_FUNCTIONS optional
+      value(IT_HYPERLINK) type LVC_T_HYPE optional
+      value(IT_ALV_GRAPHICS) type DTC_T_TC optional
+      value(IT_EXCEPT_QINFO) type LVC_T_QINF optional
+      !IR_SALV_ADAPTER type ref to IF_SALV_ADAPTER optional
+    changing
+      value(IT_SORT) type LVC_T_SORT optional
+      value(IT_FILTER) type LVC_T_FILT optional
+    exceptions
+      INVALID_PARAMETER_COMBINATION
+      PROGRAM_ERROR
+      TOO_MANY_LINES .
+
+  methods DISPATCH
+    redefinition .
+  methods FINALIZE
+    redefinition .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+    DATA outtab TYPE REF TO data .
+    DATA talv TYPE REF TO ycl_talv_parent .
+ENDCLASS.
+
+
+
+CLASS YCL_GUI_ALV_GRID IMPLEMENTATION.
+
+
+  METHOD constructor.
+
+    super->constructor( i_shellstyle            = i_shellstyle
+                        i_lifetime              = i_lifetime
+                        i_parent                = i_parent
+                        i_appl_events           = i_appl_events
+                        i_parentdbg             = i_parentdbg
+                        i_applogparent          = i_applogparent
+                        i_graphicsparent        = i_graphicsparent
+                        i_name                  = i_name
+                        i_fcat_complete         = i_fcat_complete
+                        o_previous_sral_handler = o_previous_sral_handler ).
+
+    outtab = mt_outtab.
+
+    me->talv = talv.
+
+  ENDMETHOD.
+
+
+  METHOD dispatch.
+
+    DATA: action TYPE sy-ucomm.
+    DATA: ucomm TYPE sy-ucomm.
+
+    get_event_parameter(
+      EXPORTING
+        parameter_id = 0
+        queue_only   = space
+      IMPORTING
+        parameter    = action ).
+
+    LOOP AT talv->key-intercept_ucomms INTO ucomm.
+
+      IF ucomm <> action.
+        CONTINUE.
+      ELSE.
+        RAISE EVENT grid_dispatch
+          EXPORTING
+            action = action.
+        CLEAR action.
+        EXIT.
+      ENDIF.
+
+    ENDLOOP.
+
+    IF talv->key-intercept_ucomms IS INITIAL
+      OR action IS NOT INITIAL.
+
+      CALL METHOD super->dispatch
+        EXPORTING
+          cargo             = cargo
+          eventid           = eventid
+          is_shellevent     = is_shellevent
+          is_systemdispatch = is_systemdispatch
+        EXCEPTIONS
+          cntl_error        = 1
+          OTHERS            = 2.
+      IF sy-subrc <> 0.
+        " Implement suitable error handling here
+      ENDIF.
+
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD finalize.
+    CALL METHOD super->finalize.
+  ENDMETHOD.
+
+
+  METHOD ready_for_it.
+
+    FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
+    ASSIGN outtab->* TO <outtab>.
+
+    set_table_for_first_display(
+       EXPORTING
+         i_buffer_active               = i_buffer_active
+         i_bypassing_buffer            = i_bypassing_buffer
+         i_consistency_check           = i_consistency_check
+         i_structure_name              = i_structure_name
+         is_variant                    = talv->get_variant( )
+         i_save                        = i_save
+         i_default                     = i_default
+         is_layout                     = talv->get_layout( )
+         is_print                      = is_print
+         it_special_groups             = it_special_groups
+         it_toolbar_excluding          = talv->get_ui_func( )
+         it_hyperlink                  = it_hyperlink
+         it_alv_graphics               = it_alv_graphics
+         it_except_qinfo               = it_except_qinfo
+         ir_salv_adapter               = ir_salv_adapter
+       CHANGING
+         it_outtab                     = <outtab>
+         it_fieldcatalog               = talv->key-fieldcat
+         it_sort                       = it_sort
+         it_filter                     = it_filter
+       EXCEPTIONS
+         invalid_parameter_combination = 1
+         program_error                 = 2
+         too_many_lines                = 3
+         OTHERS                        = 4 ).
+    IF sy-subrc <> 0.
+    ENDIF.
+
+  ENDMETHOD.
+ENDCLASS.
