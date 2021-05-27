@@ -78,7 +78,7 @@ FORM frm_9000_handle_on_pbo USING talv TYPE REF TO ycl_talv_parent
     fieldcat[ fieldname = 'MBLNR' ]-hotspot = abap_true.
   ENDIF.
 
-  IF fieldcat[ fieldname = 'BSTYP' ]-drdn_hndl IS INITIAL.
+  IF line_exists( fieldcat[ fieldname = 'BSTYP' ] ).
 
     fieldcat[ fieldname = 'BSTYP' ]-drdn_hndl = '1'.
 
@@ -87,7 +87,14 @@ FORM frm_9000_handle_on_pbo USING talv TYPE REF TO ycl_talv_parent
     APPEND VALUE lvc_s_drop(  handle = 1 value = 'D'  ) TO drops.
     APPEND VALUE lvc_s_drop(  handle = 1 value = 'F'  ) TO drops.
 
-    talv->get_grid( )->set_drop_down_table( EXPORTING it_drop_down = drops ).
+    DATA: drals TYPE lvc_t_dral.
+    APPEND VALUE lvc_s_dral(  handle = 1 value = 'B' int_value = 'AAAA' ) TO drals.
+    APPEND VALUE lvc_s_dral(  handle = 1 value = 'C' int_value = 'DDDD' ) TO drals.
+    APPEND VALUE lvc_s_dral(  handle = 1 value = 'E' int_value = 'FFFF' ) TO drals.
+
+    talv->get_grid( )->set_drop_down_table(
+                         it_drop_down       = drops
+                         it_drop_down_alias = drals ).
 
   ENDIF.
 
