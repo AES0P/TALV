@@ -899,13 +899,13 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
   METHOD pbo.
 
     SET PF-STATUS 'STATUS' OF PROGRAM 'SAPLZFUNG_TALV'.
-    RAISE EVENT set_pf_status.
 
     SET TITLEBAR 'TITLE'  OF PROGRAM 'SAPLZFUNG_TALV' WITH '这' '是' '个' '标' '题'.
-    RAISE EVENT set_title.
 
     init( ).
 
+    RAISE EVENT set_title.
+    RAISE EVENT set_pf_status.
     RAISE EVENT on_pbo.
 
   ENDMETHOD.
