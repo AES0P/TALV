@@ -1,4 +1,4 @@
-class YCL_TALV_POPUP_SERVICE definition
+class YCL_TALV_SERVICE_POPUP definition
   public
   final
   create public .
@@ -12,7 +12,7 @@ ENDCLASS.
 
 
 
-CLASS YCL_TALV_POPUP_SERVICE IMPLEMENTATION.
+CLASS YCL_TALV_SERVICE_POPUP IMPLEMENTATION.
 
 
   METHOD yif_generate_talv_imp~generate_talv.
@@ -42,6 +42,8 @@ CLASS YCL_TALV_POPUP_SERVICE IMPLEMENTATION.
       key-container_name  = container_name.
 
     ENDIF.
+
+    CLEAR key-container_position.
 
     CREATE OBJECT talv TYPE ycl_talv
       EXPORTING

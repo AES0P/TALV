@@ -1,20 +1,20 @@
-CLASS ycl_talv DEFINITION
-  PUBLIC
-  INHERITING FROM ycl_talv_parent
-  FINAL
-  CREATE PUBLIC .
+class YCL_TALV definition
+  public
+  inheriting from YCL_TALV_PARENT
+  final
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    METHODS display_popup
-      IMPORTING
-        VALUE(start_row)    TYPE i OPTIONAL
-        VALUE(start_column) TYPE i OPTIONAL
-        VALUE(end_row)      TYPE i OPTIONAL
-        VALUE(end_column)   TYPE i OPTIONAL .
+  methods DISPLAY_POPUP
+    importing
+      value(START_ROW) type I optional
+      value(START_COLUMN) type I optional
+      value(END_ROW) type I optional
+      value(END_COLUMN) type I optional .
 
-    METHODS display
-        REDEFINITION .
+  methods DISPLAY
+    redefinition .
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
@@ -26,22 +26,29 @@ CLASS YCL_TALV IMPLEMENTATION.
 
   METHOD display.
 
-    CALL FUNCTION 'ZFM_TALV_DISPLAY'
-      EXPORTING
-        alv = me.
-
+    IF key-container IS BOUND.
+      pbo( ).
+    ELSE.
+      CALL FUNCTION 'ZFM_TALV_DISPLAY'
+        EXPORTING
+          alv = me.
+    ENDIF.
   ENDMETHOD.
 
 
   METHOD display_popup.
 
-    CALL FUNCTION 'ZFM_TALV_DISPLAY'
-      EXPORTING
-        alv          = me
-        start_row    = start_row
-        start_column = start_column
-        end_row      = end_row
-        end_column   = end_column.
+    IF key-container IS BOUND.
+      pbo( ).
+    ELSE.
+      CALL FUNCTION 'ZFM_TALV_DISPLAY'
+        EXPORTING
+          alv          = me
+          start_row    = start_row
+          start_column = start_column
+          end_row      = end_row
+          end_column   = end_column.
+    ENDIF.
 
   ENDMETHOD.
 ENDCLASS.

@@ -43,6 +43,8 @@ CLASS YCL_TALV_SERVICE IMPLEMENTATION.
 
     ENDIF.
 
+    CLEAR key-container_position.
+
     CREATE OBJECT talv TYPE ycl_talv
       EXPORTING
         talv_key = key.

@@ -45,8 +45,8 @@ public section.
       value(IT_EXCEPT_QINFO) type LVC_T_QINF optional
       !IR_SALV_ADAPTER type ref to IF_SALV_ADAPTER optional
     changing
-      value(IT_SORT) type LVC_T_SORT optional
-      value(IT_FILTER) type LVC_T_FILT optional
+      value(CT_SORT) type LVC_T_SORT optional
+      value(CT_FILTER) type LVC_T_FILT optional
     exceptions
       INVALID_PARAMETER_COMBINATION
       PROGRAM_ERROR
@@ -164,8 +164,8 @@ CLASS YCL_GUI_ALV_GRID IMPLEMENTATION.
        CHANGING
          it_outtab                     = <outtab>
          it_fieldcatalog               = talv->key-fieldcat
-         it_sort                       = it_sort
-         it_filter                     = it_filter
+         it_sort                       = ct_sort
+         it_filter                     = ct_filter
        EXCEPTIONS
          invalid_parameter_combination = 1
          program_error                 = 2

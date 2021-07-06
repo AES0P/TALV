@@ -104,13 +104,18 @@ CLASS ycl_talv_parent DEFINITION
         VALUE(text)      TYPE text40 OPTIONAL
         VALUE(quickinfo) TYPE iconquick OPTIONAL
         VALUE(object)    TYPE REF TO cl_alv_event_toolbar_set .
+    METHODS set_header_document
+      IMPORTING
+        !doc TYPE REF TO cl_dd_document .
+    METHODS get_header_document
+      RETURNING
+        VALUE(doc) TYPE REF TO cl_dd_document .
     METHODS display
         ABSTRACT .
     METHODS pai
       CHANGING
         !ucomm TYPE sy-ucomm .
     METHODS pbo .
-    METHODS free .
     METHODS init_style
       IMPORTING
         !edit TYPE abap_bool OPTIONAL .
@@ -162,6 +167,7 @@ CLASS ycl_talv_parent DEFINITION
     METHODS is_initialized
       RETURNING
         VALUE(initialized) TYPE abap_bool .
+    METHODS free .
   PROTECTED SECTION.
 
     ALIASES on_handle_changed_finished
@@ -180,6 +186,8 @@ CLASS ycl_talv_parent DEFINITION
       FOR yif_talv_event_handle_imp~on_handle_line_button_click .
     ALIASES on_handle_toolbar
       FOR yif_talv_event_handle_imp~on_handle_toolbar .
+    ALIASES on_handle_top_of_page
+      FOR yif_talv_event_handle_imp~on_handle_top_of_page .
     ALIASES on_handle_user_command
       FOR yif_talv_event_handle_imp~on_handle_user_command .
     ALIASES on_pai_command
@@ -191,6 +199,8 @@ CLASS ycl_talv_parent DEFINITION
 
     DATA key TYPE zstalv_key .
     DATA container TYPE REF TO cl_gui_container .
+    DATA header_container TYPE REF TO cl_gui_container .
+    DATA header_document TYPE REF TO cl_dd_document .
     DATA log TYPE REF TO ycl_log .
     DATA timer TYPE REF TO cl_gui_timer .
     DATA grid TYPE REF TO ycl_gui_alv_grid .
@@ -207,8 +217,11 @@ CLASS ycl_talv_parent DEFINITION
     METHODS create_table .
     METHODS copy_table .
     METHODS check_key_info .
-    METHODS init .
     METHODS init_event_prefix .
+    METHODS init .
+    METHODS init_grid .
+    METHODS init_event .
+    METHODS init_data .
     METHODS set_key_info
       IMPORTING
         VALUE(fieldname)  TYPE fieldname
@@ -288,7 +301,7 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
 
   METHOD check_key_info.
 
-    key-program = sy-cprog.
+    key-program = sy-cprog."报表程序里是这个，其它的不一定
 
   ENDMETHOD.
 
@@ -345,6 +358,7 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
 
     create_table( ).
 
+    "数据传递
     FIELD-SYMBOLS <alv_table> TYPE STANDARD TABLE.
     ASSIGN grid->outtab->* TO <alv_table>.
 
@@ -405,6 +419,13 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
       grid->free( ).
     ENDIF.
 
+    IF key-header_height > 0.
+
+      header_container->free( ).
+      FREE header_document.
+
+    ENDIF.
+
     IF container IS BOUND.
       container->free( ).
     ENDIF.
@@ -415,6 +436,7 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
     FREE: timer,
           log,
           grid,
+          header_container,
           container.
 
     DATA dynnr(4) TYPE n VALUE ''.
@@ -459,6 +481,7 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
 
   METHOD get_fieldcat.
     grid->get_frontend_fieldcatalog( IMPORTING et_fieldcatalog = fieldcat ).
+    key-fieldcat = fieldcat.
   ENDMETHOD.
 
 
@@ -482,6 +505,7 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
     CHECK NOT fieldname CS 'VARIANT'.
     CHECK NOT fieldname CS 'UI_FUNC'.
     CHECK NOT fieldname CS 'INTERCEPT_UCOMMS'.
+    CHECK NOT fieldname = 'CONTAINER'.
 
     ASSIGN COMPONENT fieldname OF STRUCTURE key TO <field>.
     IF <field> IS ASSIGNED.
@@ -557,22 +581,66 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
 
     CHECK is_initialized( ) = abap_false.
 
-    IF key-container_name IS NOT INITIAL.
-      CREATE OBJECT container TYPE cl_gui_custom_container
-        EXPORTING
-          container_name = key-container_name.
-    ELSE.
-      CREATE OBJECT container TYPE cl_gui_docking_container
-        EXPORTING
-          repid     = key-program
-          dynnr     = key-dynnr
-          extension = 3000. "alv宽度
+    init_grid( ).
+
+    init_event( ).
+
+    set_variant( key-variant ).
+
+    set_layout( key-layout ).
+
+    set_ui_func( remove_all = key-no_ui
+                 ui_func    = key-ui_func ).
+
+    init_data( ).
+
+    grid->ready_for_it( ).
+
+    IF key-header_height > 0.
+      grid->list_processing_events( i_event_name = 'TOP_OF_PAGE' i_dyndoc_id = header_document ).
     ENDIF.
 
-    CREATE OBJECT grid
-      EXPORTING
-        talv     = me
-        i_parent = container.
+    initialized = abap_true.
+
+  ENDMETHOD.
+
+
+  METHOD init_color.
+
+    clear_line_color_table( ).
+    add_line_color( color ).
+    set_color_for_all_lines( ).
+
+  ENDMETHOD.
+
+
+  METHOD init_data.
+
+    IF key-ref_table_name IS NOT INITIAL OR key-ref_data_name IS NOT INITIAL.
+
+      "直接把程序里的表或者数据引用拿过来，先改造内表字段结构，再传递数据
+      init_fieldcat( ).
+
+      copy_table( ).
+
+    ELSE.
+
+      "直接创建ddic_type类型的内表，同时抛出事件，自行取值
+      set_fieldcat( structure_name = key-ddic_type
+                    fieldcat       = key-fieldcat ).
+
+      init_fieldcat( ).
+
+      create_table( ).
+
+      RAISE EVENT retrieve.
+
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD init_event.
 
     "不设置时也默认为1
     grid->set_ready_for_input( 1 ).
@@ -591,12 +659,13 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
     SET HANDLER on_handle_changed_finished  FOR grid.
     SET HANDLER on_handle_grid_dispatch     FOR grid.
     SET HANDLER on_handle_line_button_click FOR grid.
+    SET HANDLER on_handle_top_of_page       FOR grid.
 
+    SET HANDLER on_set_pf_status FOR me.
+    SET HANDLER on_set_title     FOR me.
     SET HANDLER yif_talv_event_handle_imp~on_pbo  FOR me.
     SET HANDLER on_pai_command   FOR me.
     SET HANDLER yif_talv_event_handle_imp~on_exit FOR me.
-    SET HANDLER on_set_pf_status FOR me.
-    SET HANDLER on_set_title     FOR me.
 
     SET HANDLER on_retrieve      FOR me.
 
@@ -620,110 +689,79 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
 
     ENDIF.
 
-    set_variant( key-variant ).
-
-    set_layout( key-layout ).
-
-    set_ui_func( remove_all = key-no_ui
-                 ui_func    = key-ui_func ).
-
-    IF key-ref_table_name IS NOT INITIAL OR key-ref_data_name IS NOT INITIAL.
-
-      init_fieldcat( ).
-
-      copy_table( ).
-
-    ELSE.
-
-      set_fieldcat( structure_name = key-ddic_type
-                    fieldcat       = key-fieldcat ).
-
-      init_fieldcat( ).
-
-      create_table( ).
-
-      RAISE EVENT retrieve.
-
-    ENDIF.
-
-    grid->ready_for_it( ).
-
-    initialized = abap_true.
-
-  ENDMETHOD.
-
-
-  METHOD init_color.
-
-    clear_line_color_table( ).
-    add_line_color( color ).
-    set_color_for_all_lines( ).
-
   ENDMETHOD.
 
 
   METHOD init_event_prefix.
 
-    key-frm_prefix = 'FRM_' && key-dynnr && '_'.
+    IF key-container_position <> '00'.
+      key-frm_prefix = 'F' && key-dynnr && '_' && key-container_position && '_'."9位
+    ELSE.
+      key-frm_prefix = 'FRM_' && key-dynnr && '_'."9位
+    ENDIF.
 
     IF key-handle_toolbar IS INITIAL.
-      key-handle_toolbar = key-frm_prefix && 'HANDLE_TOOLBAR'.
+      key-handle_toolbar = key-frm_prefix                 && 'HANDLE_TOOLBAR'.
     ENDIF.
 
     IF key-handle_user_command IS INITIAL.
-      key-handle_user_command = key-frm_prefix && 'HANDLE_USER_COMMAND'.
+      key-handle_user_command = key-frm_prefix            && 'HANDLE_USER_COMMAND'.
     ENDIF.
 
     IF key-handle_hotspot_click IS INITIAL.
-      key-handle_hotspot_click = key-frm_prefix && 'HANDLE_HOTSPOT_CLICK'.
+      key-handle_hotspot_click = key-frm_prefix           && 'HANDLE_HOTSPOT_CLICK'.
     ENDIF.
 
     IF key-handle_double_click IS INITIAL.
-      key-handle_double_click = key-frm_prefix && 'HANDLE_DOUBLE_CLICK'.
+      key-handle_double_click = key-frm_prefix            && 'HANDLE_DOUBLE_CLICK'.
     ENDIF.
 
     IF key-handle_data_changed IS INITIAL.
-      key-handle_data_changed = key-frm_prefix && 'HANDLE_DATA_CHANGED'.
+      key-handle_data_changed = key-frm_prefix            && 'HANDLE_DATA_CHANGED'.
     ENDIF.
 
     IF key-handle_data_changed_finished IS INITIAL.
-      key-handle_data_changed_finished = key-frm_prefix && 'HANDLE_CHANGED_OVER'.
+      key-handle_data_changed_finished = key-frm_prefix   && 'HANDLE_CHANGED_OVER'.
     ENDIF.
 
     IF key-handle_countdown_finished IS INITIAL.
-      key-handle_countdown_finished = key-frm_prefix && 'HANDLE_COUNTDOWN'.
+      key-handle_countdown_finished = key-frm_prefix      && 'HANDLE_COUNTDOWN'.
     ENDIF.
 
     IF key-handle_set_pf_status IS INITIAL.
-      key-handle_set_pf_status = key-frm_prefix && 'HANDLE_SET_PF_STATUS'.
+      key-handle_set_pf_status = key-frm_prefix           && 'HANDLE_SET_PF_STATUS'.
     ENDIF.
 
     IF key-handle_set_title IS INITIAL.
-      key-handle_set_title = key-frm_prefix && 'HANDLE_SET_TITLE'.
+      key-handle_set_title = key-frm_prefix               && 'HANDLE_SET_TITLE'.
     ENDIF.
 
     IF key-handle_on_pbo IS INITIAL.
-      key-handle_on_pbo = key-frm_prefix && 'HANDLE_ON_PBO'.
+      key-handle_on_pbo = key-frm_prefix                  && 'HANDLE_ON_PBO'.
     ENDIF.
 
     IF key-handle_pai_command IS INITIAL.
-      key-handle_pai_command = key-frm_prefix && 'HANDLE_PAI_COMMAND'.
+      key-handle_pai_command = key-frm_prefix             && 'HANDLE_PAI_COMMAND'.
     ENDIF.
 
     IF key-handle_exit IS INITIAL.
-      key-handle_exit = key-frm_prefix && 'HANDLE_EXIT'.
+      key-handle_exit = key-frm_prefix                    && 'HANDLE_EXIT'.
     ENDIF.
 
     IF key-handle_retrieve IS INITIAL.
-      key-handle_retrieve = key-frm_prefix && 'HANDLE_RETRIEVE'.
+      key-handle_retrieve = key-frm_prefix                && 'HANDLE_RETRIEVE'.
     ENDIF.
 
     IF key-handle_grid_dispatch IS INITIAL.
-      key-handle_grid_dispatch = key-frm_prefix && 'HANDLE_GRID_DISPATCH'.
+      key-handle_grid_dispatch = key-frm_prefix           && 'HANDLE_GRID_DISPATCH'.
     ENDIF.
 
     IF key-handle_line_btn_click IS INITIAL.
-      key-handle_line_btn_click = key-frm_prefix && 'HANDLE_LINE_BTN_CLICK'.
+      key-handle_line_btn_click = key-frm_prefix          && 'HANDLE_LINE_BTN_CLK'.
+    ENDIF.
+
+    IF key-handle_top_of_page IS INITIAL.
+      key-handle_top_of_page = key-frm_prefix             && 'HANDLE_TOP_OF_PAGE'.
     ENDIF.
 
   ENDMETHOD.
@@ -760,6 +798,50 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
       SORT key-fieldcat BY col_pos.
 
     ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD init_grid.
+
+    IF key-container IS NOT BOUND.
+      CREATE OBJECT container TYPE cl_gui_custom_container
+        EXPORTING
+          container_name = key-container_name.
+    ELSE.
+      container = key-container.
+    ENDIF.
+
+    IF key-header_height > 0.
+
+      DATA splitter TYPE REF TO cl_gui_splitter_container.
+
+      CREATE OBJECT splitter
+        EXPORTING
+          parent  = container
+          rows    = 2
+          columns = 1.
+
+      splitter->set_row_height( id = 1 height = CONV i( key-header_height ) ).
+
+      header_container = splitter->get_container( row = 1 column = 1 ).
+
+      CREATE OBJECT grid
+        EXPORTING
+          talv     = me
+          i_parent = splitter->get_container( row = 2 column = 1 ).
+
+      CREATE OBJECT header_document
+        EXPORTING
+          style = 'ALV_GRID'.
+
+    ELSE.
+      CREATE OBJECT grid
+        EXPORTING
+          talv     = me
+          i_parent = container.
+    ENDIF.
+
 
   ENDMETHOD.
 
@@ -816,13 +898,13 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
 
   METHOD pbo.
 
-    init( ).
-
     SET PF-STATUS 'STATUS' OF PROGRAM 'SAPLZFUNG_TALV'.
     RAISE EVENT set_pf_status.
 
     SET TITLEBAR 'TITLE'  OF PROGRAM 'SAPLZFUNG_TALV' WITH '这' '是' '个' '标' '题'.
     RAISE EVENT set_title.
+
+    init( ).
 
     RAISE EVENT on_pbo.
 
@@ -851,56 +933,53 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
 
   METHOD remove_fields.
 
-    DATA: fieldcats TYPE lvc_t_fcat.
+    CHECK fields IS NOT INITIAL.
 
     DATA: fieldnames TYPE tty_fieldname,
           fieldname  LIKE LINE OF fieldnames.
 
-    CHECK fields IS NOT INITIAL.
-
     TRANSLATE fields TO UPPER CASE.
     SPLIT fields AT space INTO TABLE fieldnames.
 
-    fieldcats = get_fieldcat( ).
+    get_fieldcat( ).
 
     LOOP AT fieldnames INTO fieldname.
-      DELETE fieldcats WHERE fieldname = fieldname-fieldname.
+      DELETE key-fieldcat WHERE fieldname = fieldname-fieldname.
     ENDLOOP.
 
-    set_fieldcat( fieldcats ).
+    set_fieldcat( key-fieldcat ).
 
   ENDMETHOD.
 
 
   METHOD save_fields.
 
-    DATA: fieldcats_old TYPE lvc_t_fcat,
-          fieldcats_new TYPE lvc_t_fcat.
-
-    DATA: fieldcat LIKE LINE OF fieldcats_old.
+    CHECK fields IS NOT INITIAL.
 
     DATA: fieldnames TYPE tty_fieldname,
           fieldname  LIKE LINE OF fieldnames.
 
-    CHECK fields IS NOT INITIAL.
-
     TRANSLATE fields TO UPPER CASE.
     SPLIT fields AT space INTO TABLE fieldnames.
 
-    CLEAR: fieldcats_new.
+    DATA: fieldcats_old TYPE lvc_t_fcat,
+          fieldcat_old  LIKE LINE OF fieldcats_old.
+
     fieldcats_old = get_fieldcat( ).
+
+    CLEAR key-fieldcat.
 
     LOOP AT fieldnames INTO fieldname.
 
-      READ TABLE fieldcats_old INTO fieldcat WITH KEY fieldname = fieldname-fieldname.
+      READ TABLE fieldcats_old INTO fieldcat_old WITH KEY fieldname = fieldname-fieldname.
       IF sy-subrc = 0.
-        APPEND fieldcat TO fieldcats_new.
-        CLEAR: fieldcat.
+        APPEND fieldcat_old TO key-fieldcat.
+        CLEAR: fieldcat_old.
       ENDIF.
 
     ENDLOOP.
 
-    set_fieldcat( fieldcats_new ).
+    set_fieldcat( key-fieldcat ).
 
   ENDMETHOD.
 
@@ -1065,6 +1144,7 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
 
     IF layout IS NOT INITIAL.
 
+      key-layout = layout.
       grid->set_frontend_layout( layout ).
 
     ELSE.
@@ -1171,13 +1251,14 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
 
     IF variant IS NOT INITIAL.
 
+      key-variant = variant.
       grid->set_variant( variant ).
 
     ELSE.
 
       CLEAR: key-variant.
       "使用 报表名 + 屏幕编号 + 容器ID 就可以给每一个ALV设定属于它自己的变式
-      key-variant-report = key-program && key-dynnr && key-container_name.
+      key-variant-report = key-program && key-dynnr && key-container_name  && key-container_position.
       key-variant-handle   = '0001'.
       key-variant-username = sy-uname.
 
@@ -1367,6 +1448,32 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD yif_talv_event_handle_imp~on_handle_top_of_page.
+
+    CHECK key-header_height > 0.
+
+    FIELD-SYMBOLS <table> TYPE STANDARD TABLE.
+    ASSIGN grid->outtab->* TO <table>.
+
+    PERFORM (key-handle_top_of_page)
+ IN PROGRAM (key-program)
+      USING me e_dyndoc_id table_index
+   CHANGING <table>
+   IF FOUND.
+
+    CALL METHOD header_document->display_document
+      EXPORTING
+        reuse_control      = abap_true
+        parent             = header_container
+      EXCEPTIONS
+        html_display_error = 1.
+    IF sy-subrc NE 0.
+      MESSAGE 'Error in displaying top-of-page' TYPE 'E'.
+    ENDIF.
+
+  ENDMETHOD.
+
+
   METHOD yif_talv_event_handle_imp~on_handle_user_command.
 
     FIELD-SYMBOLS <table> TYPE STANDARD TABLE.
@@ -1443,5 +1550,15 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
     PERFORM (key-handle_set_title)
  IN PROGRAM (key-program)
    IF FOUND.
+  ENDMETHOD.
+
+
+  METHOD set_header_document.
+    header_document = doc.
+  ENDMETHOD.
+
+
+  METHOD get_header_document.
+    doc = header_document.
   ENDMETHOD.
 ENDCLASS.

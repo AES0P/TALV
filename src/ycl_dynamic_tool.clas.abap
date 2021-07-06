@@ -185,7 +185,7 @@ CLASS YCL_DYNAMIC_TOOL IMPLEMENTATION.
 
     LOOP AT outtab ASSIGNING <original>.
       LOOP AT fieldcatalog ASSIGNING <fieldcat>.
-        ASSIGN COMPONENT <fieldcat>-fieldname OF STRUCTURE <original> TO <from>.
+        ASSIGN COMPONENT <fieldcat>-fieldname OF STRUCTURE <original>    TO <from>.
         ASSIGN COMPONENT <fieldcat>-fieldname OF STRUCTURE <destination> TO <to>.
         MOVE <from> TO <to>.
       ENDLOOP.
@@ -221,17 +221,16 @@ CLASS YCL_DYNAMIC_TOOL IMPLEMENTATION.
       checkbox = checkbox_name.
     ENDIF.
 
-    this->create_table_by_fieldcat(
-            object                = this
-            class_name            = 'YCL_DYNAMIC_TOOL'
-            class_method          = 'INTERNAL_RECEIVER'
-            fieldcats             = this->transfer_lvc_fcat_to_kkblo( fieldcats )
-            checkbox_name         = checkbox
-            light_name            = talv_key-light_name
-            cell_color_table_name = talv_key-color_table_name
-            style_table           = style
-            length_in_byte        = length_in_byte
-            tabname               = '1' ).
+    this->create_table_by_fieldcat( object                = this
+                                    class_name            = 'YCL_DYNAMIC_TOOL'
+                                    class_method          = 'INTERNAL_RECEIVER'
+                                    fieldcats             = this->transfer_lvc_fcat_to_kkblo( fieldcats )
+                                    checkbox_name         = checkbox
+                                    light_name            = talv_key-light_name
+                                    cell_color_table_name = talv_key-color_table_name
+                                    style_table           = style
+                                    length_in_byte        = length_in_byte
+                                    tabname               = '1' ).
     IF table IS BOUND.
       data_table = table.
     ELSE.
@@ -635,37 +634,37 @@ CLASS YCL_DYNAMIC_TOOL IMPLEMENTATION.
 
   METHOD get_components_base.
 
-    DATA: lr_structdesc TYPE REF TO cl_abap_structdescr,
-          lt_comp       TYPE cl_abap_structdescr=>component_table,
-          lt_comp2      TYPE cl_abap_structdescr=>component_table,
-          lv_flag       TYPE abap_bool,
-          lv_idx        TYPE i,
-          lv_tabix      TYPE i.
+    DATA: structdesc TYPE REF TO cl_abap_structdescr,
+          comps      TYPE cl_abap_structdescr=>component_table,
+          comps2     TYPE cl_abap_structdescr=>component_table,
+          flag       TYPE abap_bool,
+          idx        TYPE i,
+          tabix      TYPE i.
 
-    FIELD-SYMBOLS: <fs_comp>  LIKE LINE OF lt_comp,
-                   <fs_comp2> LIKE LINE OF lt_comp2.
+    FIELD-SYMBOLS: <comp>  LIKE LINE OF comps,
+                   <comp2> LIKE LINE OF comps2.
 
-    CLEAR: lt_comp[],
+    CLEAR: comps[],
            components[],
-           lt_comp2[].
+           comps2[].
 
-    lt_comp = structdescr->get_components(  ).
-    lv_flag = abap_true.
+    comps = structdescr->get_components(  ).
+    flag = abap_true.
 
-    WHILE lv_flag = abap_true.
-      CLEAR lv_flag.
-      LOOP AT lt_comp ASSIGNING <fs_comp> FROM lv_tabix.
-        IF <fs_comp>-as_include EQ 'X'.
-          lv_flag = abap_true.
-          lv_tabix = sy-tabix.
-          lv_idx   = sy-tabix + 1.
-          lr_structdesc ?= <fs_comp>-type.
-          lt_comp2 = lr_structdesc->get_components( ).
-          LOOP AT lt_comp2 ASSIGNING <fs_comp2>.
-            INSERT <fs_comp2> INTO lt_comp INDEX lv_idx.
-            ADD 1 TO lv_idx.
+    WHILE flag = abap_true.
+      CLEAR flag.
+      LOOP AT comps ASSIGNING <comp> FROM tabix.
+        IF <comp>-as_include EQ 'X'.
+          flag = abap_true.
+          tabix = sy-tabix.
+          idx   = sy-tabix + 1.
+          structdesc ?= <comp>-type.
+          comps2 = structdesc->get_components( ).
+          LOOP AT comps2 ASSIGNING <comp2>.
+            INSERT <comp2> INTO comps INDEX idx.
+            ADD 1 TO idx.
           ENDLOOP.
-          DELETE lt_comp INDEX lv_tabix.
+          DELETE comps INDEX tabix.
           EXIT.
         ENDIF.
       ENDLOOP.
@@ -673,7 +672,7 @@ CLASS YCL_DYNAMIC_TOOL IMPLEMENTATION.
 
     " Aligning data structure by keys
 
-    components[] = lt_comp[].
+    components[] = comps[].
 
   ENDMETHOD.
 

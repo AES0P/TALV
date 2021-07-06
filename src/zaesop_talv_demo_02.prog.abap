@@ -204,7 +204,7 @@ FORM frm_9000_handle_data_changed USING talv            TYPE REF TO ycl_talv_par
 
   LOOP AT po_data_changed->mt_mod_cells INTO DATA(cell) WHERE fieldname = 'BUKRS'.
 
-    IF <alv_table>[ cell-row_id ]-bukrs = '3500'.
+    IF <alv_table>[ cell-row_id ]-bukrs = 'C001'.
 
       po_data_changed->add_protocol_entry(
                          i_msgid     = '00'

@@ -6,6 +6,7 @@
    <INCLUDES>
     <SOBJ_NAME>LZTALVTAB001F00</SOBJ_NAME>
     <SOBJ_NAME>LZTALVTAB001I00</SOBJ_NAME>
+    <SOBJ_NAME>LZTALVTAB001I01</SOBJ_NAME>
     <SOBJ_NAME>LZTALVTAB001T00</SOBJ_NAME>
     <SOBJ_NAME>LZTALVTAB001TOP</SOBJ_NAME>
     <SOBJ_NAME>SAPLZTALVTAB001</SOBJ_NAME>
@@ -491,8 +492,8 @@
        <FROM_DICT>X</FROM_DICT>
        <MODIFIC>X</MODIFIC>
        <UP_LOWER>X</UP_LOWER>
-       <INPUT_FLD>X</INPUT_FLD>
        <OUTPUT_FLD>X</OUTPUT_FLD>
+       <REQU_ENTRY>N</REQU_ENTRY>
       </RPY_DYFATC>
      </FIELDS>
      <FLOW_LOGIC>
@@ -500,19 +501,19 @@
        <LINE>PROCESS BEFORE OUTPUT.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE> MODULE LISTE_INITIALISIEREN.</LINE>
+       <LINE>  MODULE liste_initialisieren.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE> LOOP AT EXTRACT WITH CONTROL</LINE>
+       <LINE>  LOOP AT extract WITH CONTROL</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>  TCTRL_ZTALV_SERVICE CURSOR NEXTLINE.</LINE>
+       <LINE>   tctrl_ztalv_service CURSOR nextline.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>   MODULE LISTE_SHOW_LISTE.</LINE>
+       <LINE>    MODULE liste_show_liste.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE> ENDLOOP.</LINE>
+       <LINE>  ENDLOOP.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
        <LINE>*</LINE>
@@ -521,55 +522,70 @@
        <LINE>PROCESS AFTER INPUT.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE> MODULE LISTE_EXIT_COMMAND AT EXIT-COMMAND.</LINE>
+       <LINE>  MODULE liste_exit_command AT EXIT-COMMAND.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE> MODULE LISTE_BEFORE_LOOP.</LINE>
+       <LINE>  MODULE liste_before_loop.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE> LOOP AT EXTRACT.</LINE>
+       <LINE>  LOOP AT extract.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>   MODULE LISTE_INIT_WORKAREA.</LINE>
+       <LINE>    MODULE liste_init_workarea.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>   CHAIN.</LINE>
+       <LINE>    CHAIN.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>    FIELD ZTALV_SERVICE-TYPE .</LINE>
+       <LINE>      FIELD ztalv_service-type .</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>    FIELD ZTALV_SERVICE-CLSNAME .</LINE>
+       <LINE>      FIELD ztalv_service-clsname .</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>    FIELD ZTALV_SERVICE-DESCRIPTION .</LINE>
+       <LINE>      FIELD ztalv_service-description .</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>    MODULE SET_UPDATE_FLAG ON CHAIN-REQUEST.</LINE>
+       <LINE>      MODULE set_update_flag ON CHAIN-REQUEST.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>   ENDCHAIN.</LINE>
+       <LINE>    ENDCHAIN.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>   FIELD VIM_MARKED MODULE LISTE_MARK_CHECKBOX.</LINE>
+       <LINE>    CHAIN.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>   CHAIN.</LINE>
+       <LINE>      FIELD ztalv_service-clsname .</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>    FIELD ZTALV_SERVICE-TYPE .</LINE>
+       <LINE>      FIELD ztalv_service-description.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>    MODULE LISTE_UPDATE_LISTE.</LINE>
+       <LINE>      MODULE get_description.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE>   ENDCHAIN.</LINE>
+       <LINE>    ENDCHAIN.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE> ENDLOOP.</LINE>
+       <LINE>    FIELD vim_marked MODULE liste_mark_checkbox.</LINE>
       </RPY_DYFLOW>
       <RPY_DYFLOW>
-       <LINE> MODULE LISTE_AFTER_LOOP.</LINE>
+       <LINE>    CHAIN.</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>      FIELD ztalv_service-type .</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>      MODULE liste_update_liste.</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>    ENDCHAIN.</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>  ENDLOOP.</LINE>
+      </RPY_DYFLOW>
+      <RPY_DYFLOW>
+       <LINE>  MODULE liste_after_loop.</LINE>
       </RPY_DYFLOW>
      </FLOW_LOGIC>
     </item>

@@ -38,7 +38,10 @@ interface YIF_TALV_EVENT_HANDLE_IMP
   methods ON_HANDLE_COUNTDOWN_FINISHED
     for event FINISHED of CL_GUI_TIMER .
   methods ON_HANDLE_TOP_OF_PAGE
-    for event TOP_OF_PAGE of YCL_GUI_ALV_GRID .
+    for event TOP_OF_PAGE of YCL_GUI_ALV_GRID
+    importing
+      !E_DYNDOC_ID
+      !TABLE_INDEX .
   methods ON_SET_PF_STATUS
     for event SET_PF_STATUS of YCL_TALV_PARENT .
   methods ON_SET_TITLE
