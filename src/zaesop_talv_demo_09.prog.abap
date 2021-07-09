@@ -32,6 +32,7 @@ CLASS lcl_this IMPLEMENTATION.
     "工厂模式生成TALV并直接展示
     ycl_talv_factory=>get_talv( VALUE #(  type                  = 'TALV'
                                           ddic_type             = lcl_this=>ddic
+                                          ui_func               = VALUE #( ( ycl_gui_alv_grid=>mc_fc_loc_undo ) )
                                           show_long_text_button = abap_true
                                           style_table_name      = 'STYLE'  ) )->display( ).
 

@@ -204,33 +204,34 @@ CLASS ycl_talv_parent DEFINITION
     DATA log TYPE REF TO ycl_log .
     DATA timer TYPE REF TO cl_gui_timer .
     DATA grid TYPE REF TO ycl_gui_alv_grid .
-  PRIVATE SECTION.
+private section.
 
-    DATA initialized TYPE abap_bool VALUE abap_false ##NO_TEXT.
-    DATA style_table TYPE lvc_t_styl .
-    DATA color_table TYPE lvc_t_scol .
-    DATA intercept_ucomm TYPE tty_intercept_ucomm .
+  data INITIALIZED type ABAP_BOOL value ABAP_FALSE ##NO_TEXT.
+  data STYLE_TABLE type LVC_T_STYL .
+  data COLOR_TABLE type LVC_T_SCOL .
+  data INTERCEPT_UCOMM type TTY_INTERCEPT_UCOMM .
 
-    METHODS set_btn_style_for_single_line
-      CHANGING
-        VALUE(alv_line) TYPE any .
-    METHODS create_table .
-    METHODS copy_table .
-    METHODS check_key_info .
-    METHODS init_event_prefix .
-    METHODS init .
-    METHODS init_grid .
-    METHODS init_event .
-    METHODS init_data .
-    METHODS set_key_info
-      IMPORTING
-        VALUE(fieldname)  TYPE fieldname
-        VALUE(fieldvalue) TYPE fieldvalue .
-    METHODS handle_long_text_field
-      IMPORTING
-        !fieldname TYPE fieldname
-      CHANGING
-        !value     TYPE c .
+  methods SET_BTN_STYLE_FOR_ALL_LINE .
+  methods SET_BTN_STYLE_FOR_SINGLE_LINE
+    changing
+      value(ALV_LINE) type ANY .
+  methods CREATE_TABLE .
+  methods COPY_TABLE .
+  methods CHECK_KEY_INFO .
+  methods INIT_EVENT_PREFIX .
+  methods INIT .
+  methods INIT_GRID .
+  methods INIT_EVENT .
+  methods INIT_DATA .
+  methods SET_KEY_INFO
+    importing
+      value(FIELDNAME) type FIELDNAME
+      value(FIELDVALUE) type FIELDVALUE .
+  methods HANDLE_LONG_TEXT_FIELD
+    importing
+      !FIELDNAME type FIELDNAME
+    changing
+      !VALUE type C .
 ENDCLASS.
 
 
@@ -370,6 +371,7 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
   METHOD create_table.
 
     CHECK grid->outtab IS NOT BOUND.
+
     IF key-style_table_name IS INITIAL AND key-checkbox_name IS INITIAL.
       CREATE DATA grid->outtab TYPE STANDARD TABLE OF (key-ddic_type).
     ELSE.
@@ -913,6 +915,11 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
 
   METHOD refresh.
 
+    set_btn_style_for_all_line( ).
+
+    key-layout-cwidth_opt = abap_true.
+    set_layout( key-layout ).
+
     "刷新变量
     DATA: stable TYPE lvc_s_stbl.
 
@@ -922,7 +929,8 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
     stable-row = 'X'."基于行刷新
     stable-col = 'X'."基于列刷新
 
-    grid->refresh_table_display( is_stable = stable ).
+    grid->refresh_table_display( is_stable = stable i_soft_refresh = abap_true ).
+
 
     IF timer IS BOUND.
       timer->run( ).
@@ -1232,10 +1240,12 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
 
     ELSE.
 
+      IF key-layout-edit <> abap_true.
+        APPEND ycl_gui_alv_grid=>mc_fc_loc_append_row  TO key-ui_func.
+        APPEND ycl_gui_alv_grid=>mc_fc_loc_delete_row  TO key-ui_func.
+      ENDIF.
       "不想使用这里的默认排除，就自己通过key传入ui_func
-*      APPEND ycl_gui_alv_grid=>mc_fc_loc_append_row    TO key-ui_func.
       APPEND ycl_gui_alv_grid=>mc_fc_loc_insert_row    TO key-ui_func.
-*      APPEND ycl_gui_alv_grid=>mc_fc_loc_delete_row    TO key-ui_func.
       APPEND ycl_gui_alv_grid=>mc_fc_loc_cut           TO key-ui_func.
       APPEND ycl_gui_alv_grid=>mc_fc_loc_paste         TO key-ui_func.
       APPEND ycl_gui_alv_grid=>mc_fc_loc_paste_new_row TO key-ui_func.
@@ -1560,5 +1570,20 @@ CLASS YCL_TALV_PARENT IMPLEMENTATION.
 
   METHOD get_header_document.
     doc = header_document.
+  ENDMETHOD.
+
+
+  METHOD set_btn_style_for_all_line.
+
+    CHECK key-show_long_text_button = abap_true.
+
+    FIELD-SYMBOLS: <table>      TYPE STANDARD TABLE,
+                   <table_line> TYPE any.
+    ASSIGN grid->outtab->* TO <table>.
+
+    LOOP AT <table> ASSIGNING <table_line>.
+      set_btn_style_for_single_line( CHANGING alv_line = <table_line> ).
+    ENDLOOP.
+
   ENDMETHOD.
 ENDCLASS.
