@@ -12,7 +12,7 @@ CLASS lcl_this DEFINITION CREATE PUBLIC.
 
   PUBLIC SECTION.
 
-    CLASS-DATA po_items TYPE REF TO ycl_talv_parent.
+    CLASS-DATA po_items TYPE REF TO zcl_talv_parent.
 
     CLASS-METHODS main.
 
@@ -30,7 +30,7 @@ CLASS lcl_this IMPLEMENTATION.
   METHOD main.
 
     "工厂模式生成TALV并直接展示
-    ycl_talv_factory=>get_talv( VALUE #( type               = 'TALV_CUS'
+    zcl_talv_factory=>get_talv( VALUE #( type               = 'TALV_CUS'
                                          ddic_type          = 'EKKO'
                                          dynnr              = '9000'
                                          checkbox_name      = 'SEL'
@@ -41,7 +41,7 @@ CLASS lcl_this IMPLEMENTATION.
                                          header_height      = 28
                                          container          = NEW cl_gui_custom_container( container_name = 'CON1' ) ) )->display( ).
 
-    lcl_this=>po_items = ycl_talv_factory=>get_talv( VALUE #( type               = 'TALV_CUS'
+    lcl_this=>po_items = zcl_talv_factory=>get_talv( VALUE #( type               = 'TALV_CUS'
                                                               ddic_type          = 'EKPO'
                                                               checkbox_name      = 'SEL'
                                                               dynnr              = '9000'
@@ -93,7 +93,7 @@ FORM f9000_02_handle_retrieve USING ddic_type TYPE tabname
 
 ENDFORM.
 
-FORM f9000_01_handle_top_of_page USING talv TYPE REF TO ycl_talv_parent
+FORM f9000_01_handle_top_of_page USING talv TYPE REF TO zcl_talv_parent
                                        document TYPE REF TO cl_dd_document
                                        table_index TYPE syindex
                               CHANGING alv_table TYPE STANDARD TABLE.
@@ -133,7 +133,7 @@ FORM f9000_01_handle_top_of_page USING talv TYPE REF TO ycl_talv_parent
                       sap_emphasis = cl_dd_area=>heading ).
 ENDFORM.
 
-FORM f9000_02_handle_top_of_page USING talv TYPE REF TO ycl_talv_parent
+FORM f9000_02_handle_top_of_page USING talv TYPE REF TO zcl_talv_parent
                                        document TYPE REF TO cl_dd_document
                                        table_index TYPE syindex
                               CHANGING alv_table TYPE STANDARD TABLE.
@@ -144,7 +144,7 @@ FORM f9000_02_handle_top_of_page USING talv TYPE REF TO ycl_talv_parent
 
 ENDFORM.
 
-FORM f9000_01_handle_changed_over USING talv TYPE REF TO ycl_talv_parent
+FORM f9000_01_handle_changed_over USING talv TYPE REF TO zcl_talv_parent
                                         pv_modified   TYPE char01
                                         pt_good_cells TYPE lvc_t_modi
                                CHANGING alv_table TYPE STANDARD TABLE.
@@ -181,18 +181,18 @@ FORM f9000_01_handle_changed_over USING talv TYPE REF TO ycl_talv_parent
 
       <light> = icon_led_red.
 
-      talv->add_line_style( style = ycl_gui_alv_grid=>mc_style_disabled ).
+      talv->add_line_style( style = zcl_gui_alv_grid=>mc_style_disabled ).
       talv->add_line_color( 3 ).
 
     ELSE.
 
       <light>    = icon_led_green.
 
-      talv->add_line_style( style     = ycl_gui_alv_grid=>mc_style_disabled ).
+      talv->add_line_style( style     = zcl_gui_alv_grid=>mc_style_disabled ).
       talv->add_line_style( fieldname = 'BUKRS'"指定列名则只对该列生效，不指定则全部列生效
-                            style     = ycl_gui_alv_grid=>mc_style_enabled
-                            style2    = ycl_gui_alv_grid=>mc_style_hotspot
-                            style4    = ycl_gui_alv_grid=>mc_style4_link ).
+                            style     = zcl_gui_alv_grid=>mc_style_enabled
+                            style2    = zcl_gui_alv_grid=>mc_style_hotspot
+                            style4    = zcl_gui_alv_grid=>mc_style4_link ).
 
       talv->add_line_color( 6 ).
       talv->add_line_color( fieldname = 'BUKRS' col = 5 ).
@@ -200,7 +200,7 @@ FORM f9000_01_handle_changed_over USING talv TYPE REF TO ycl_talv_parent
     ENDIF.
 
     talv->add_line_style( fieldname = CONV fieldname( talv->get_key_info( 'CHECKBOX_NAME' ) )"不冻结选择框
-                          style     = ycl_gui_alv_grid=>mc_style_enabled ).
+                          style     = zcl_gui_alv_grid=>mc_style_enabled ).
 
     "针对指定行修改
     talv->set_style_for_single_line( index ).

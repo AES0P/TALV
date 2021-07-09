@@ -62,7 +62,7 @@ CLASS lcl_this IMPLEMENTATION.
       UP TO 20 ROWS.
 
     "从普通表copy数据到TALV进行展示和处理
-    ycl_talv_factory=>get_talv( VALUE #(  type             = 'TALV_POPUP'
+    zcl_talv_factory=>get_talv( VALUE #(  type             = 'TALV_POPUP'
                                           ref_table_name   = 'LCL_THIS=>PO_LINES'"参考内表
                                           checkbox_name    = 'BOX'
                                           light_name       = 'LIGHT'
@@ -89,7 +89,7 @@ CLASS lcl_this IMPLEMENTATION.
     MOVE-CORRESPONDING po_lines TO <po_data>.
 
     ""从参考对象copy数据到TALV进行展示和处理
-    ycl_talv_factory=>get_talv( VALUE #(  type                         = 'TALV'
+    zcl_talv_factory=>get_talv( VALUE #(  type                         = 'TALV'
                                           ref_data_name                = 'LCL_THIS=>PO_DATA'"参考引用
                                           fieldcat                     = fieldcat"引用必须传入fieldcat
                                           handle_data_changed_finished = 'FRM_9900_HANDLE_CHANGED_OVER'
@@ -111,7 +111,7 @@ FORM frm_9000_handle_set_title.
   SET TITLEBAR 'TITLE'  OF PROGRAM 'SAPLZFUNG_TALV' WITH '数据引用转TALV'.
 ENDFORM.
 
-FORM frm_9900_handle_changed_over USING talv TYPE REF TO ycl_talv_parent
+FORM frm_9900_handle_changed_over USING talv TYPE REF TO zcl_talv_parent
                                         pv_modified   TYPE char01
                                         pt_good_cells TYPE lvc_t_modi
                                CHANGING alv_table TYPE STANDARD TABLE.
@@ -133,18 +133,18 @@ FORM frm_9900_handle_changed_over USING talv TYPE REF TO ycl_talv_parent
 
       <light> = icon_led_red.
 
-      talv->add_line_style( style = ycl_gui_alv_grid=>mc_style_disabled ).
+      talv->add_line_style( style = zcl_gui_alv_grid=>mc_style_disabled ).
       talv->add_line_color( 3 ).
 
     ELSE.
 
       <light>    = icon_led_green.
 
-      talv->add_line_style( style     = ycl_gui_alv_grid=>mc_style_disabled ).
+      talv->add_line_style( style     = zcl_gui_alv_grid=>mc_style_disabled ).
       talv->add_line_style( fieldname = 'MENGE'"指定列名则只对该列生效，不指定则全部列生效
-                            style     = ycl_gui_alv_grid=>mc_style_enabled
-                            style2    = ycl_gui_alv_grid=>mc_style_hotspot
-                            style4    = ycl_gui_alv_grid=>mc_style4_link ).
+                            style     = zcl_gui_alv_grid=>mc_style_enabled
+                            style2    = zcl_gui_alv_grid=>mc_style_hotspot
+                            style4    = zcl_gui_alv_grid=>mc_style4_link ).
 
       talv->add_line_color( 6 ).
       talv->add_line_color( fieldname = 'MENGE' col = 5 ).
@@ -152,7 +152,7 @@ FORM frm_9900_handle_changed_over USING talv TYPE REF TO ycl_talv_parent
     ENDIF.
 
     talv->add_line_style( fieldname = CONV fieldname( talv->get_key_info( 'CHECKBOX_NAME' ) )"不冻结选择框
-                          style     = ycl_gui_alv_grid=>mc_style_enabled ).
+                          style     = zcl_gui_alv_grid=>mc_style_enabled ).
 
     "针对指定行修改
     talv->set_style_for_single_line( index ).

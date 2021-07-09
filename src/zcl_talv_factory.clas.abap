@@ -1,4 +1,4 @@
-CLASS ycl_talv_factory DEFINITION
+CLASS zcl_talv_factory DEFINITION
   PUBLIC
   FINAL
   CREATE PRIVATE .
@@ -9,19 +9,19 @@ CLASS ycl_talv_factory DEFINITION
       IMPORTING
         VALUE(key)  TYPE zstalv_key
       RETURNING
-        VALUE(talv) TYPE REF TO ycl_talv_parent .
+        VALUE(talv) TYPE REF TO zcl_talv_parent .
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
 
 
 
-CLASS YCL_TALV_FACTORY IMPLEMENTATION.
+CLASS ZCL_TALV_FACTORY IMPLEMENTATION.
 
 
   METHOD get_talv.
 
-    DATA: generate_talv_service TYPE REF TO yif_generate_talv_imp.
+    DATA: generate_talv_service TYPE REF TO zif_generate_talv_imp.
     DATA: service TYPE seoclsname.
 
     SELECT SINGLE clsname

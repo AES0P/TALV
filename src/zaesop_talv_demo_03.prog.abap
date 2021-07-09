@@ -43,7 +43,7 @@ CLASS lcl_this IMPLEMENTATION.
     key-ddic_type     = lcl_this=>ddic.
 
     "工厂模式生成TALV并直接展示
-    ycl_talv_factory=>get_talv( key )->display( ).
+    zcl_talv_factory=>get_talv( key )->display( ).
 
   ENDMETHOD.
 
@@ -61,7 +61,7 @@ FORM frm_9001_handle_set_title.
   SET TITLEBAR 'TITLE'  OF PROGRAM 'SAPLZFUNG_TALV' WITH '行项目' '明细'.
 ENDFORM.
 
-FORM frm_9000_handle_on_pbo USING talv TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_on_pbo USING talv TYPE REF TO zcl_talv_parent
                          CHANGING alv_table TYPE STANDARD TABLE.
 
   DATA(fieldcat) = talv->get_fieldcat( )."生成TALV后仍可修改其字段目录 及每个字段的属性
@@ -106,7 +106,7 @@ FORM frm_9001_handle_retrieve USING pv_ddic_type TYPE tabname
 
 ENDFORM.
 
-FORM frm_9000_handle_hotspot_click USING talv TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_hotspot_click USING talv TYPE REF TO zcl_talv_parent
                                          e_row      TYPE lvc_s_row
                                          e_column   TYPE lvc_s_col
                                          es_sub_row TYPE lvc_s_roid
@@ -124,7 +124,7 @@ FORM frm_9000_handle_hotspot_click USING talv TYPE REF TO ycl_talv_parent
   DATA(ebeln) = <alv_table>[ e_row-index ]-ebeln.
   EXPORT ebeln = ebeln TO MEMORY ID 'EBELN'.
 
-  ycl_talv_factory=>get_talv( key )->display( ).
+  zcl_talv_factory=>get_talv( key )->display( ).
 
   talv->refresh( ).
 

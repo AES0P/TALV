@@ -49,7 +49,7 @@ CLASS lcl_this IMPLEMENTATION.
     key-interval      = '10'.
 
     "工厂模式生成TALV并直接展示
-    ycl_talv_factory=>get_talv( key )->display( ).
+    zcl_talv_factory=>get_talv( key )->display( ).
 
   ENDMETHOD.
 
@@ -63,7 +63,7 @@ FORM frm_9000_handle_set_title.
   SET TITLEBAR 'TITLE'  OF PROGRAM 'SAPLZFUNG_TALV' WITH '抬头' '明细'.
 ENDFORM.
 
-FORM frm_9000_handle_on_pbo USING talv TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_on_pbo USING talv TYPE REF TO zcl_talv_parent
                          CHANGING alv_table TYPE STANDARD TABLE.
 
   DATA(fieldcat) = talv->get_fieldcat( )."生成TALV后仍可修改其字段目录 及每个字段的属性
@@ -112,7 +112,7 @@ FORM frm_9000_handle_on_pbo USING talv TYPE REF TO ycl_talv_parent
 
 ENDFORM.
 
-FORM frm_9000_handle_pai_command USING talv      TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_pai_command USING talv      TYPE REF TO zcl_talv_parent
                                        pv_ucomm  TYPE sy-ucomm
                               CHANGING alv_table TYPE STANDARD TABLE.
 
@@ -120,7 +120,7 @@ FORM frm_9000_handle_pai_command USING talv      TYPE REF TO ycl_talv_parent
 
 ENDFORM.
 
-FORM frm_9000_handle_exit USING talv      TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_exit USING talv      TYPE REF TO zcl_talv_parent
                        CHANGING alv_table TYPE STANDARD TABLE.
 
   MESSAGE 'exit' TYPE 'S'.
@@ -144,7 +144,7 @@ FORM frm_9000_handle_retrieve USING pv_ddic_type TYPE tabname
 
 ENDFORM.
 *
-FORM frm_9000_handle_toolbar  USING talv           TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_toolbar  USING talv           TYPE REF TO zcl_talv_parent
                                     po_object      TYPE REF TO cl_alv_event_toolbar_set
                                     pv_interactive TYPE char01
                            CHANGING alv_table      TYPE STANDARD TABLE.
@@ -159,7 +159,7 @@ FORM frm_9000_handle_toolbar  USING talv           TYPE REF TO ycl_talv_parent
 
 ENDFORM.
 
-FORM frm_9000_handle_user_command USING talv      TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_user_command USING talv      TYPE REF TO zcl_talv_parent
                                         pv_ucomm  TYPE sy-ucomm
                                CHANGING alv_table TYPE STANDARD TABLE.
 
@@ -168,7 +168,7 @@ FORM frm_9000_handle_user_command USING talv      TYPE REF TO ycl_talv_parent
 
 ENDFORM.
 
-FORM frm_9000_handle_hotspot_click USING talv       TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_hotspot_click USING talv       TYPE REF TO zcl_talv_parent
                                          e_row      TYPE lvc_s_row
                                          e_column   TYPE lvc_s_col
                                          es_sub_row TYPE lvc_s_roid
@@ -179,7 +179,7 @@ FORM frm_9000_handle_hotspot_click USING talv       TYPE REF TO ycl_talv_parent
 
 ENDFORM.
 
-FORM frm_9000_handle_double_click USING talv      TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_double_click USING talv      TYPE REF TO zcl_talv_parent
                                         e_row     TYPE lvc_s_row
                                         e_column  TYPE lvc_s_col
                                CHANGING alv_table TYPE STANDARD TABLE.
@@ -189,7 +189,7 @@ FORM frm_9000_handle_double_click USING talv      TYPE REF TO ycl_talv_parent
 
 ENDFORM.
 
-FORM frm_9000_handle_data_changed USING talv            TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_data_changed USING talv            TYPE REF TO zcl_talv_parent
                                         po_data_changed TYPE REF TO cl_alv_changed_data_protocol
                                         p_onf4          TYPE char01
                                         p_onf4_before   TYPE char01
@@ -225,7 +225,7 @@ FORM frm_9000_handle_data_changed USING talv            TYPE REF TO ycl_talv_par
 
 ENDFORM.
 
-FORM frm_9000_handle_changed_over USING talv TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_changed_over USING talv TYPE REF TO zcl_talv_parent
                                         pv_modified   TYPE char01
                                         pt_good_cells TYPE lvc_t_modi
                                CHANGING alv_table TYPE STANDARD TABLE.
@@ -239,7 +239,7 @@ FORM frm_9000_handle_changed_over USING talv TYPE REF TO ycl_talv_parent
 
 ENDFORM.
 
-FORM frm_9000_handle_countdown USING talv TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_countdown USING talv TYPE REF TO zcl_talv_parent
                             CHANGING alv_table TYPE STANDARD TABLE.
 
   MESSAGE 'countdown' TYPE 'S'.

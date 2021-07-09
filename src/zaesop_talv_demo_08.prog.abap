@@ -15,7 +15,7 @@ CLASS lcl_this DEFINITION CREATE PUBLIC.
     CLASS-DATA json_str     TYPE string VALUE 'type:"F", title:"*", expanded:true,columns:2, labelSpan:3.2,fields:"*"'.
     CLASS-DATA split_symbol TYPE c VALUE ','.
 
-    CLASS-DATA json_handler TYPE REF TO yif_talv_json_handler.
+    CLASS-DATA json_handler TYPE REF TO zif_talv_json_handler.
 
     CLASS-METHODS main.
 
@@ -34,7 +34,7 @@ CLASS lcl_this IMPLEMENTATION.
 
   METHOD main.
 
-    json_handler ?= ycl_talv_json_handler=>get_instance( ).
+    json_handler ?= zcl_talv_json_handler=>get_instance( ).
 
     json_handler->json_to_talv(
                     json      = json_str
@@ -48,7 +48,7 @@ FORM frm_9000_handle_set_title.
   SET TITLEBAR 'TITLE'  OF PROGRAM 'SAPLZFUNG_TALV' WITH 'JSON数据处理'.
 ENDFORM.
 
-FORM frm_9000_handle_on_pbo USING talv TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_on_pbo USING talv TYPE REF TO zcl_talv_parent
                          CHANGING alv_table TYPE STANDARD TABLE.
 
   DATA(layout) = talv->get_layout( )."生成TALV后仍可修改其布局设置属性
@@ -59,7 +59,7 @@ FORM frm_9000_handle_on_pbo USING talv TYPE REF TO ycl_talv_parent
 
 ENDFORM.
 
-FORM frm_9000_handle_pai_command USING talv TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_pai_command USING talv TYPE REF TO zcl_talv_parent
                                        pv_ucomm TYPE sy-ucomm
                               CHANGING alv_table TYPE STANDARD TABLE.
   cl_demo_output=>display(

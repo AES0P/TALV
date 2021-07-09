@@ -1,71 +1,71 @@
-class YCL_GUI_ALV_GRID definition
-  public
-  inheriting from CL_GUI_ALV_GRID
-  final
-  create public
+CLASS zcl_gui_alv_grid DEFINITION
+  PUBLIC
+  INHERITING FROM cl_gui_alv_grid
+  FINAL
+  CREATE PUBLIC
 
-  global friends YCL_TALV_PARENT .
+  GLOBAL FRIENDS zcl_talv_parent .
 
-public section.
+  PUBLIC SECTION.
 
-  events GRID_DISPATCH
-    exporting
-      value(ACTION) type SY-UCOMM .
+    EVENTS grid_dispatch
+      EXPORTING
+        VALUE(action) TYPE sy-ucomm .
 
-  methods CONSTRUCTOR
-    importing
-      value(TALV) type ref to YCL_TALV_PARENT
-      value(I_SHELLSTYLE) type I default 0
-      value(I_LIFETIME) type I optional
-      value(I_PARENT) type ref to CL_GUI_CONTAINER
-      value(I_APPL_EVENTS) type CHAR01 default SPACE
-      !I_PARENTDBG type ref to CL_GUI_CONTAINER optional
-      !I_APPLOGPARENT type ref to CL_GUI_CONTAINER optional
-      !I_GRAPHICSPARENT type ref to CL_GUI_CONTAINER optional
-      value(I_NAME) type STRING optional
-      !I_FCAT_COMPLETE type SAP_BOOL default SPACE
-    exceptions
-      ERROR_CNTL_CREATE
-      ERROR_CNTL_INIT
-      ERROR_CNTL_LINK
-      ERROR_DP_CREATE .
-  methods READY_FOR_IT
-    importing
-      value(I_BUFFER_ACTIVE) type ANY optional
-      value(I_BYPASSING_BUFFER) type CHAR01 optional
-      value(I_CONSISTENCY_CHECK) type CHAR1 optional
-      value(I_STRUCTURE_NAME) type DD02L-TABNAME optional
-      value(I_SAVE) type CHAR01 default 'A'
-      value(I_DEFAULT) type CHAR01 default 'X'
-      value(IS_PRINT) type LVC_S_PRNT optional
-      value(IT_SPECIAL_GROUPS) type LVC_T_SGRP optional
-      value(IT_TOOLBAR_EXCLUDING) type UI_FUNCTIONS optional
-      value(IT_HYPERLINK) type LVC_T_HYPE optional
-      value(IT_ALV_GRAPHICS) type DTC_T_TC optional
-      value(IT_EXCEPT_QINFO) type LVC_T_QINF optional
-      !IR_SALV_ADAPTER type ref to IF_SALV_ADAPTER optional
-    changing
-      value(CT_SORT) type LVC_T_SORT optional
-      value(CT_FILTER) type LVC_T_FILT optional
-    exceptions
-      INVALID_PARAMETER_COMBINATION
-      PROGRAM_ERROR
-      TOO_MANY_LINES .
+    METHODS constructor
+      IMPORTING
+        VALUE(talv)          TYPE REF TO zcl_talv_parent
+        VALUE(i_shellstyle)  TYPE i DEFAULT 0
+        VALUE(i_lifetime)    TYPE i OPTIONAL
+        VALUE(i_parent)      TYPE REF TO cl_gui_container
+        VALUE(i_appl_events) TYPE char01 DEFAULT space
+        !i_parentdbg         TYPE REF TO cl_gui_container OPTIONAL
+        !i_applogparent      TYPE REF TO cl_gui_container OPTIONAL
+        !i_graphicsparent    TYPE REF TO cl_gui_container OPTIONAL
+        VALUE(i_name)        TYPE string OPTIONAL
+        !i_fcat_complete     TYPE sap_bool DEFAULT space
+      EXCEPTIONS
+        error_cntl_create
+        error_cntl_init
+        error_cntl_link
+        error_dp_create .
+    METHODS ready_for_it
+      IMPORTING
+        VALUE(i_buffer_active)      TYPE any OPTIONAL
+        VALUE(i_bypassing_buffer)   TYPE char01 OPTIONAL
+        VALUE(i_consistency_check)  TYPE char1 OPTIONAL
+        VALUE(i_structure_name)     TYPE dd02l-tabname OPTIONAL
+        VALUE(i_save)               TYPE char01 DEFAULT 'A'
+        VALUE(i_default)            TYPE char01 DEFAULT 'X'
+        VALUE(is_print)             TYPE lvc_s_prnt OPTIONAL
+        VALUE(it_special_groups)    TYPE lvc_t_sgrp OPTIONAL
+        VALUE(it_toolbar_excluding) TYPE ui_functions OPTIONAL
+        VALUE(it_hyperlink)         TYPE lvc_t_hype OPTIONAL
+        VALUE(it_alv_graphics)      TYPE dtc_t_tc OPTIONAL
+        VALUE(it_except_qinfo)      TYPE lvc_t_qinf OPTIONAL
+        !ir_salv_adapter            TYPE REF TO if_salv_adapter OPTIONAL
+      CHANGING
+        VALUE(ct_sort)              TYPE lvc_t_sort OPTIONAL
+        VALUE(ct_filter)            TYPE lvc_t_filt OPTIONAL
+      EXCEPTIONS
+        invalid_parameter_combination
+        program_error
+        too_many_lines .
 
-  methods DISPATCH
-    redefinition .
-  methods FINALIZE
-    redefinition .
+    METHODS dispatch
+        REDEFINITION .
+    METHODS finalize
+        REDEFINITION .
   PROTECTED SECTION.
   PRIVATE SECTION.
 
     DATA outtab TYPE REF TO data .
-    DATA talv TYPE REF TO ycl_talv_parent .
+    DATA talv TYPE REF TO zcl_talv_parent .
 ENDCLASS.
 
 
 
-CLASS YCL_GUI_ALV_GRID IMPLEMENTATION.
+CLASS ZCL_GUI_ALV_GRID IMPLEMENTATION.
 
 
   METHOD constructor.

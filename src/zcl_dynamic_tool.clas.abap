@@ -1,16 +1,16 @@
-class YCL_DYNAMIC_TOOL definition
-  public
-  create private .
+CLASS zcl_dynamic_tool DEFINITION
+  PUBLIC
+  CREATE PRIVATE .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces YIF_SINGLETON .
+    INTERFACES zif_singleton .
 
-  aliases GET_INSTANCE
-    for YIF_SINGLETON~GET_INSTANCE .
+    ALIASES get_instance
+      FOR zif_singleton~get_instance .
 
-  types:
-    BEGIN OF comp_info,
+    TYPES:
+      BEGIN OF comp_info,
         field      TYPE fieldname,
         text       TYPE string,
         domname    TYPE domname,
@@ -26,93 +26,93 @@ public section.
         convexit   TYPE convexit,
         memoryid   TYPE memoryid,
       END OF comp_info .
-  types:
-    tcomp_info TYPE STANDARD TABLE OF comp_info WITH KEY field .
+    TYPES:
+      tcomp_info TYPE STANDARD TABLE OF comp_info WITH KEY field .
 
-  class-methods COPY_REF_TABLE_VALUE
-    importing
-      !OUTTAB type STANDARD TABLE
-      !FIELDCATALOG type LVC_T_FCAT
-    returning
-      value(DESTAB) type ref to DATA .
-  class-methods INTERNAL_RECEIVER
-    importing
-      !IP_TABLE type ref to DATA .
-  class-methods CREATE_DYNAMIC_TABLE
-    importing
-      value(TALV_KEY) type ZSTALV_KEY optional
-      value(FIELDCATALOG) type LVC_T_FCAT optional
-      value(CHECKBOX_NAME) type C optional
-      value(STYLE_TABLE_NAME) type C optional
-      value(LENGTH_IN_BYTE) type BOOLEAN optional
-    returning
-      value(DATA_TABLE) type ref to DATA .
-  methods TRANSFER_LVC_FCAT_TO_KKBLO
-    importing
-      value(FIELDCAT_LVC) type LVC_T_FCAT
-    returning
-      value(FIELDCAT_KKBLO) type KKBLO_T_FIELDCAT .
-  methods CREATE_TABLE_BY_FIELDCAT
-    importing
-      value(FIELDCATS) type KKBLO_T_FIELDCAT
-      value(OBJECT) type ANY
-      value(CLASS_NAME) type ANY
-      value(CLASS_METHOD) type C
-      value(CHECKBOX_NAME) type C
-      value(LIGHT_NAME) type C
-      value(CELL_COLOR_TABLE_NAME) type C
-      value(STYLE_TABLE) type C
-      value(TABNAME) type KKBLO_TABNAME
-      value(LENGTH_IN_BYTE) type BOOLEAN .
-  methods GET_TABLE_COMPONENTS_BY_DATA
-    importing
-      value(TABLE) type STANDARD TABLE
-    returning
-      value(COMPONENTS) type CL_ABAP_STRUCTDESCR=>COMPONENT_TABLE .
-  methods GET_STRUC_COMPONENTS_BY_DATA
-    importing
-      value(WA) type ANY
-    returning
-      value(COMPONENTS) type CL_ABAP_STRUCTDESCR=>COMPONENT_TABLE .
-  methods GET_COMPONENTS_BY_GLOBAL_TYPE
-    importing
-      value(TYPE_NAME) type C
-    returning
-      value(COMPONENTS) type CL_ABAP_STRUCTDESCR=>COMPONENT_TABLE .
-  methods GET_COMPONENTS_BASE
-    importing
-      !STRUCTDESCR type ref to CL_ABAP_STRUCTDESCR
-    returning
-      value(COMPONENTS) type CL_ABAP_STRUCTDESCR=>COMPONENT_TABLE .
-  methods GET_COMPONENTS_INFO
-    importing
-      !COMPONENTS type CL_ABAP_STRUCTDESCR=>COMPONENT_TABLE
-    returning
-      value(INFO) type TCOMP_INFO .
-  methods GET_COMPONENT_INFO_BASE
-    importing
-      !COMPONENTDESCR type ABAP_COMPONENTDESCR
-      !RETTYPE type CHAR1 optional
-    exporting
-      value(FIELD_INFO) type DFIES
-    returning
-      value(TEXT) type STRING .
-  methods CONVERT_COMPONENTS_TO_FIELDCAT
-    importing
-      !COMPONENTS type CL_ABAP_STRUCTDESCR=>COMPONENT_TABLE
-    returning
-      value(TFIELDCAT) type LVC_T_FCAT .
+    CLASS-METHODS copy_ref_table_value
+      IMPORTING
+        !outtab       TYPE STANDARD TABLE
+        !fieldcatalog TYPE lvc_t_fcat
+      RETURNING
+        VALUE(destab) TYPE REF TO data .
+    CLASS-METHODS internal_receiver
+      IMPORTING
+        !ip_table TYPE REF TO data .
+    CLASS-METHODS create_dynamic_table
+      IMPORTING
+        VALUE(talv_key)         TYPE zstalv_key OPTIONAL
+        VALUE(fieldcatalog)     TYPE lvc_t_fcat OPTIONAL
+        VALUE(checkbox_name)    TYPE c OPTIONAL
+        VALUE(style_table_name) TYPE c OPTIONAL
+        VALUE(length_in_byte)   TYPE boolean OPTIONAL
+      RETURNING
+        VALUE(data_table)       TYPE REF TO data .
+    METHODS transfer_lvc_fcat_to_kkblo
+      IMPORTING
+        VALUE(fieldcat_lvc)   TYPE lvc_t_fcat
+      RETURNING
+        VALUE(fieldcat_kkblo) TYPE kkblo_t_fieldcat .
+    METHODS create_table_by_fieldcat
+      IMPORTING
+        VALUE(fieldcats)             TYPE kkblo_t_fieldcat
+        VALUE(object)                TYPE any
+        VALUE(class_name)            TYPE any
+        VALUE(class_method)          TYPE c
+        VALUE(checkbox_name)         TYPE c
+        VALUE(light_name)            TYPE c
+        VALUE(cell_color_table_name) TYPE c
+        VALUE(style_table)           TYPE c
+        VALUE(tabname)               TYPE kkblo_tabname
+        VALUE(length_in_byte)        TYPE boolean .
+    METHODS get_table_components_by_data
+      IMPORTING
+        VALUE(table)      TYPE STANDARD TABLE
+      RETURNING
+        VALUE(components) TYPE cl_abap_structdescr=>component_table .
+    METHODS get_struc_components_by_data
+      IMPORTING
+        VALUE(wa)         TYPE any
+      RETURNING
+        VALUE(components) TYPE cl_abap_structdescr=>component_table .
+    METHODS get_components_by_global_type
+      IMPORTING
+        VALUE(type_name)  TYPE c
+      RETURNING
+        VALUE(components) TYPE cl_abap_structdescr=>component_table .
+    METHODS get_components_base
+      IMPORTING
+        !structdescr      TYPE REF TO cl_abap_structdescr
+      RETURNING
+        VALUE(components) TYPE cl_abap_structdescr=>component_table .
+    METHODS get_components_info
+      IMPORTING
+        !components TYPE cl_abap_structdescr=>component_table
+      RETURNING
+        VALUE(info) TYPE tcomp_info .
+    METHODS get_component_info_base
+      IMPORTING
+        !componentdescr   TYPE abap_componentdescr
+        !rettype          TYPE char1 OPTIONAL
+      EXPORTING
+        VALUE(field_info) TYPE dfies
+      RETURNING
+        VALUE(text)       TYPE string .
+    METHODS convert_components_to_fieldcat
+      IMPORTING
+        !components      TYPE cl_abap_structdescr=>component_table
+      RETURNING
+        VALUE(tfieldcat) TYPE lvc_t_fcat .
   PROTECTED SECTION.
   PRIVATE SECTION.
 
-    CLASS-DATA tool_instance TYPE REF TO ycl_dynamic_tool .
+    CLASS-DATA tool_instance TYPE REF TO zcl_dynamic_tool .
     DATA default_name TYPE char6 VALUE 'ORIGIN' ##NO_TEXT.
     CLASS-DATA table TYPE REF TO data .
 ENDCLASS.
 
 
 
-CLASS YCL_DYNAMIC_TOOL IMPLEMENTATION.
+CLASS ZCL_DYNAMIC_TOOL IMPLEMENTATION.
 
 
   METHOD convert_components_to_fieldcat.
@@ -177,7 +177,7 @@ CLASS YCL_DYNAMIC_TOOL IMPLEMENTATION.
     DATA: destination TYPE REF TO data.
 
     "用指定要copy的字段创建内表
-    destab = ycl_dynamic_tool=>create_dynamic_table( fieldcatalog = fieldcatalog ).
+    destab = zcl_dynamic_tool=>create_dynamic_table( fieldcatalog = fieldcatalog ).
 
     ASSIGN destab->* TO <destinations>.
     CREATE DATA destination LIKE LINE OF <destinations>.
@@ -197,7 +197,7 @@ CLASS YCL_DYNAMIC_TOOL IMPLEMENTATION.
 
   METHOD create_dynamic_table.
 
-    DATA this TYPE REF TO ycl_dynamic_tool.
+    DATA this TYPE REF TO zcl_dynamic_tool.
 
     this ?= get_instance( ).
 
@@ -222,7 +222,7 @@ CLASS YCL_DYNAMIC_TOOL IMPLEMENTATION.
     ENDIF.
 
     this->create_table_by_fieldcat( object                = this
-                                    class_name            = 'YCL_DYNAMIC_TOOL'
+                                    class_name            = 'Zcl_dynamic_tool'
                                     class_method          = 'INTERNAL_RECEIVER'
                                     fieldcats             = this->transfer_lvc_fcat_to_kkblo( fieldcats )
                                     checkbox_name         = checkbox
@@ -586,7 +586,7 @@ CLASS YCL_DYNAMIC_TOOL IMPLEMENTATION.
                     'EXPORTING IP_TABLE = POINTER.'
                INTO code_line SEPARATED BY space.
       ELSE.
-        CONCATENATE 'CALL METHOD YCL_DYNAMIC_TOOL=>'
+        CONCATENATE 'CALL METHOD Zcl_dynamic_tool=>'
                     class_method
                INTO code_line.
 
@@ -822,7 +822,7 @@ CLASS YCL_DYNAMIC_TOOL IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD yif_singleton~get_instance.
+  METHOD zif_singleton~get_instance.
 
     IF tool_instance IS NOT BOUND.
       CREATE OBJECT tool_instance.

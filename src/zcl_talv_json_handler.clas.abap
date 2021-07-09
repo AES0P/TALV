@@ -1,84 +1,84 @@
-class YCL_TALV_JSON_HANDLER definition
-  public
-  final
-  create private .
+CLASS zcl_talv_json_handler DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PRIVATE .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces YIF_SINGLETON .
-  interfaces YIF_TALV_JSON_HANDLER .
+    INTERFACES zif_singleton .
+    INTERFACES zif_talv_json_handler .
 
-  aliases FIELDCATS
-    for YIF_TALV_JSON_HANDLER~FIELDCATS .
-  aliases GET_INSTANCE
-    for YIF_SINGLETON~GET_INSTANCE .
-  aliases JSON_TO_TALV
-    for YIF_TALV_JSON_HANDLER~JSON_TO_TALV .
-  aliases TALV_TO_JSON
-    for YIF_TALV_JSON_HANDLER~TALV_TO_JSON .
+    ALIASES fieldcats
+      FOR zif_talv_json_handler~fieldcats .
+    ALIASES get_instance
+      FOR zif_singleton~get_instance .
+    ALIASES json_to_talv
+      FOR zif_talv_json_handler~json_to_talv .
+    ALIASES talv_to_json
+      FOR zif_talv_json_handler~talv_to_json .
 
-  class-data TABLE type ref to DATA .
+    CLASS-DATA table TYPE REF TO data .
 
-  methods JSON_TO_KVTAB
-    importing
-      value(JSON) type STRING
-      value(SPLIT_SYMBOL) type C default ','
-    returning
-      value(KVTAB) type STRING_TABLE .
-  methods KVTAB_TO_JSON
-    importing
-      value(KVTAB) type STRING_TABLE
-      value(SPLIT_SYMBOL) type C
-    returning
-      value(JSON) type STRING .
-  methods KVTAB_TO_FIELDCATS
-    importing
-      value(KVTAB) type STRING_TABLE
-    returning
-      value(FIELDCATS) type YIF_TALV_JSON_HANDLER~TTY_KV .
-  methods FIELDCATS_TO_KVTAB
-    importing
-      value(FIELDCATS) type YIF_TALV_JSON_HANDLER~TTY_KV
-    returning
-      value(KVTAB) type STRING_TABLE .
-  methods KV_TO_FIELDCAT
-    importing
-      value(KV) type STRING_TABLE
-    returning
-      value(FIELDCAT) type YIF_TALV_JSON_HANDLER~TY_KV .
-  methods FIELDCAT_TO_KV
-    importing
-      value(FIELDCAT) type YIF_TALV_JSON_HANDLER~TY_KV
-    returning
-      value(KV) type STRING .
-  methods FIELDCATS_TO_TALV
-    importing
-      value(FIELDCATS) type YIF_TALV_JSON_HANDLER~TTY_KV
-      value(TALV_TYPE) type ZDETALV_TYPE optional
-    returning
-      value(TALV) type ref to YCL_TALV_PARENT .
-  methods TALV_TO_FIELDCATS
-    importing
-      !TALV type ref to YCL_TALV_PARENT
-    returning
-      value(FIELDCATS) type YIF_TALV_JSON_HANDLER~TTY_KV .
+    METHODS json_to_kvtab
+      IMPORTING
+        VALUE(json)         TYPE string
+        VALUE(split_symbol) TYPE c DEFAULT ','
+      RETURNING
+        VALUE(kvtab)        TYPE string_table .
+    METHODS kvtab_to_json
+      IMPORTING
+        VALUE(kvtab)        TYPE string_table
+        VALUE(split_symbol) TYPE c
+      RETURNING
+        VALUE(json)         TYPE string .
+    METHODS kvtab_to_fieldcats
+      IMPORTING
+        VALUE(kvtab)     TYPE string_table
+      RETURNING
+        VALUE(fieldcats) TYPE zif_talv_json_handler~tty_kv .
+    METHODS fieldcats_to_kvtab
+      IMPORTING
+        VALUE(fieldcats) TYPE zif_talv_json_handler~tty_kv
+      RETURNING
+        VALUE(kvtab)     TYPE string_table .
+    METHODS kv_to_fieldcat
+      IMPORTING
+        VALUE(kv)       TYPE string_table
+      RETURNING
+        VALUE(fieldcat) TYPE zif_talv_json_handler~ty_kv .
+    METHODS fieldcat_to_kv
+      IMPORTING
+        VALUE(fieldcat) TYPE zif_talv_json_handler~ty_kv
+      RETURNING
+        VALUE(kv)       TYPE string .
+    METHODS fieldcats_to_talv
+      IMPORTING
+        VALUE(fieldcats) TYPE zif_talv_json_handler~tty_kv
+        VALUE(talv_type) TYPE zdetalv_type OPTIONAL
+      RETURNING
+        VALUE(talv)      TYPE REF TO zcl_talv_parent .
+    METHODS talv_to_fieldcats
+      IMPORTING
+        !talv            TYPE REF TO zcl_talv_parent
+      RETURNING
+        VALUE(fieldcats) TYPE zif_talv_json_handler~tty_kv .
   PROTECTED SECTION.
 
-private section.
+  PRIVATE SECTION.
 
-  class-data HANDLER type ref to YCL_TALV_JSON_HANDLER .
+    CLASS-DATA handler TYPE REF TO zcl_talv_json_handler .
 ENDCLASS.
 
 
 
-CLASS YCL_TALV_JSON_HANDLER IMPLEMENTATION.
+CLASS ZCL_TALV_JSON_HANDLER IMPLEMENTATION.
 
 
-  METHOD FIELDCATS_TO_KVTAB.
+  METHOD fieldcats_to_kvtab.
 
     CLEAR kvtab.
 
-    DATA fieldcat TYPE yif_talv_json_handler~ty_kv.
+    DATA fieldcat TYPE zif_talv_json_handler~ty_kv.
     LOOP AT fieldcats INTO fieldcat.
 
       APPEND fieldcat_to_kv( fieldcat = fieldcat ) TO kvtab.
@@ -92,7 +92,7 @@ CLASS YCL_TALV_JSON_HANDLER IMPLEMENTATION.
 
     DATA fieldcatalog TYPE lvc_t_fcat.
     MOVE-CORRESPONDING fieldcats TO fieldcatalog.
-    table = ycl_dynamic_tool=>create_dynamic_table( fieldcatalog = fieldcatalog ).
+    table = zcl_dynamic_tool=>create_dynamic_table( fieldcatalog = fieldcatalog ).
 
     FIELD-SYMBOLS: <table>      TYPE STANDARD TABLE,
                    <table_line> TYPE any,
@@ -102,7 +102,7 @@ CLASS YCL_TALV_JSON_HANDLER IMPLEMENTATION.
     APPEND INITIAL LINE TO <table>.
     READ TABLE <table> ASSIGNING <table_line> INDEX 1.
 
-    DATA fieldcat TYPE yif_talv_json_handler~ty_kv.
+    DATA fieldcat TYPE zif_talv_json_handler~ty_kv.
     LOOP AT fieldcats INTO fieldcat.
 
       ASSIGN COMPONENT fieldcat-fieldname OF STRUCTURE <table_line> TO <field>.
@@ -115,8 +115,8 @@ CLASS YCL_TALV_JSON_HANDLER IMPLEMENTATION.
       talv_type = 'TALV_POPUP'.
     ENDIF.
 
-    talv = ycl_talv_factory=>get_talv( VALUE #(  type             = talv_type
-                                                 ref_data_name    = 'YCL_TALV_JSON_HANDLER=>TABLE'
+    talv = zcl_talv_factory=>get_talv( VALUE #(  type             = talv_type
+                                                 ref_data_name    = 'ZCL_TALV_JSON_HANDLER=>TABLE'
                                                  fieldcat         = fieldcatalog
                                                  color_table_name = 'COLOR'
                                                  style_table_name = 'STYLE' ) ).
@@ -124,7 +124,7 @@ CLASS YCL_TALV_JSON_HANDLER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD FIELDCAT_TO_KV.
+  METHOD fieldcat_to_kv.
 
     DATA: key   TYPE string,
           value TYPE string.
@@ -224,7 +224,7 @@ CLASS YCL_TALV_JSON_HANDLER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD KVTAB_TO_JSON.
+  METHOD kvtab_to_json.
 
     CLEAR json.
 
@@ -342,7 +342,7 @@ CLASS YCL_TALV_JSON_HANDLER IMPLEMENTATION.
 
     MOVE-CORRESPONDING talv->get_fieldcat( ) TO fieldcats.
 
-    FIELD-SYMBOLS <fieldcat> TYPE yif_talv_json_handler~ty_kv.
+    FIELD-SYMBOLS <fieldcat> TYPE zif_talv_json_handler~ty_kv.
     LOOP AT fieldcats ASSIGNING <fieldcat>.
 
       ASSIGN COMPONENT to_upper( <fieldcat>-fieldname ) OF STRUCTURE <table_line> TO <value>.
@@ -354,7 +354,7 @@ CLASS YCL_TALV_JSON_HANDLER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD yif_singleton~get_instance.
+  METHOD zif_singleton~get_instance.
 
     IF handler IS NOT BOUND.
       CREATE OBJECT handler.
@@ -365,7 +365,7 @@ CLASS YCL_TALV_JSON_HANDLER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD yif_talv_json_handler~json_to_talv.
+  METHOD zif_talv_json_handler~json_to_talv.
 
     talv = fieldcats_to_talv(
              fieldcats = kvtab_to_fieldcats(
@@ -377,7 +377,7 @@ CLASS YCL_TALV_JSON_HANDLER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD yif_talv_json_handler~talv_to_json.
+  METHOD zif_talv_json_handler~talv_to_json.
 
     json = kvtab_to_json(
              kvtab        = fieldcats_to_kvtab(

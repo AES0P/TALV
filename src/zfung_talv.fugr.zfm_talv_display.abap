@@ -2,7 +2,7 @@ FUNCTION zfm_talv_display.
 *"----------------------------------------------------------------------
 *"*"本地接口：
 *"  IMPORTING
-*"     REFERENCE(ALV) TYPE REF TO  YCL_TALV_PARENT
+*"     REFERENCE(ALV) TYPE REF TO  ZCL_TALV_PARENT
 *"     VALUE(START_ROW) TYPE  I OPTIONAL
 *"     VALUE(START_COLUMN) TYPE  I OPTIONAL
 *"     VALUE(END_ROW) TYPE  I OPTIONAL

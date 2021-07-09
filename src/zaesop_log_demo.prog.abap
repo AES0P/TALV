@@ -16,7 +16,7 @@ TYPES: BEGIN OF ty_return2,
 *----------------------------------------------------------------------*
 * 全局变量声明
 *----------------------------------------------------------------------*
-DATA log TYPE REF TO ycl_log.
+DATA log TYPE REF TO zcl_log.
 
 *----------------------------------------------------------------------*
 * initialization/初始化
@@ -44,7 +44,7 @@ END-OF-SELECTION.
 FORM frm_initialization .
 
   "需提前在SLG0创建系统日志对象（跨客户端表）
-  log = ycl_log=>get_instance( object    = 'ZMM'
+  log = zcl_log=>get_instance( object    = 'ZMM'
                                subobject = 'ZMM/ZMM001'
                                msg_ext   = CONV balnrext( sy-uname ) ).
 

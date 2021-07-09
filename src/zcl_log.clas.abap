@@ -1,4 +1,4 @@
-CLASS ycl_log DEFINITION
+CLASS zcl_log DEFINITION
   PUBLIC
   FINAL
   CREATE PRIVATE .
@@ -41,7 +41,7 @@ CLASS ycl_log DEFINITION
         VALUE(msg_ext)     TYPE balnrext OPTIONAL
         VALUE(auto_commit) TYPE abap_bool DEFAULT abap_true
       RETURNING
-        VALUE(log)         TYPE REF TO ycl_log .
+        VALUE(log)         TYPE REF TO zcl_log .
     METHODS get_table
       RETURNING
         VALUE(table) TYPE tty_log_detail .
@@ -50,27 +50,27 @@ CLASS ycl_log DEFINITION
       IMPORTING
         VALUE(content) TYPE c
       RETURNING
-        VALUE(log)     TYPE REF TO ycl_log .
+        VALUE(log)     TYPE REF TO zcl_log .
     METHODS info
       IMPORTING
         VALUE(content) TYPE c
       RETURNING
-        VALUE(log)     TYPE REF TO ycl_log .
+        VALUE(log)     TYPE REF TO zcl_log .
     METHODS warning
       IMPORTING
         VALUE(content) TYPE c
       RETURNING
-        VALUE(log)     TYPE REF TO ycl_log .
+        VALUE(log)     TYPE REF TO zcl_log .
     METHODS error
       IMPORTING
         VALUE(content) TYPE c
       RETURNING
-        VALUE(log)     TYPE REF TO ycl_log .
+        VALUE(log)     TYPE REF TO zcl_log .
     METHODS debug
       IMPORTING
         VALUE(uname) TYPE sy-uname
       RETURNING
-        VALUE(log)   TYPE REF TO ycl_log .
+        VALUE(log)   TYPE REF TO zcl_log .
     METHODS exception
       IMPORTING
         VALUE(exception) TYPE REF TO cx_root .
@@ -79,7 +79,7 @@ CLASS ycl_log DEFINITION
         VALUE(return)       TYPE any
         VALUE(mapping_rule) TYPE tty_mapping_rule OPTIONAL
       RETURNING
-        VALUE(log)          TYPE REF TO ycl_log .
+        VALUE(log)          TYPE REF TO zcl_log .
     METHODS insert_message_to_table
       IMPORTING
         VALUE(message) TYPE recamsg .
@@ -121,7 +121,7 @@ CLASS ycl_log DEFINITION
   PRIVATE SECTION.
 
     DATA log_handle TYPE balloghndl .
-    CLASS-DATA logger TYPE REF TO ycl_log .
+    CLASS-DATA logger TYPE REF TO zcl_log .
     DATA object TYPE balobj_d .
     DATA subobject TYPE balsubobj .
     DATA msg_ext TYPE balnrext .
@@ -138,7 +138,7 @@ ENDCLASS.
 
 
 
-CLASS YCL_LOG IMPLEMENTATION.
+CLASS ZCL_LOG IMPLEMENTATION.
 
 
   METHOD add_bal_log_msg.

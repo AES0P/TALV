@@ -41,19 +41,19 @@ CLASS lcl_this IMPLEMENTATION.
 
     "要拦截的标准功能
     key-intercept_ucomms = VALUE #(
-                                   ( ycl_gui_alv_grid=>mc_fc_refresh )
-                                   ( ycl_gui_alv_grid=>mc_fc_sort_asc )
-                                   ( ycl_gui_alv_grid=>mc_fc_sort_dsc )
+                                   ( zcl_gui_alv_grid=>mc_fc_refresh )
+                                   ( zcl_gui_alv_grid=>mc_fc_sort_asc )
+                                   ( zcl_gui_alv_grid=>mc_fc_sort_dsc )
                                    ).
 
     "工厂模式生成TALV并直接展示
-    ycl_talv_factory=>get_talv( key )->display( ).
+    zcl_talv_factory=>get_talv( key )->display( ).
 
   ENDMETHOD.
 
 ENDCLASS.
 
-FORM frm_9000_handle_on_pbo USING talv TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_on_pbo USING talv TYPE REF TO zcl_talv_parent
                          CHANGING alv_table TYPE STANDARD TABLE.
 
   talv->save_fields( 'BOX EBELN BUKRS BSTYP BSART LOEKZ AEDAT ERNAM' ).
@@ -79,18 +79,18 @@ FORM frm_9000_handle_retrieve USING pv_ddic_type TYPE tabname
 
 ENDFORM.
 
-FORM frm_9000_handle_grid_dispatch USING talv TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_grid_dispatch USING talv TYPE REF TO zcl_talv_parent
                                          action   TYPE sy-ucomm
                                 CHANGING alv_table TYPE STANDARD TABLE.
   "重写拦截功能
   CASE action.
-    WHEN ycl_gui_alv_grid=>mc_fc_refresh.
+    WHEN zcl_gui_alv_grid=>mc_fc_refresh.
       MESSAGE 'MC_FC_REFRESH' TYPE 'S'.
       talv->on_retrieve( ).
-    WHEN ycl_gui_alv_grid=>mc_fc_sort_asc.
+    WHEN zcl_gui_alv_grid=>mc_fc_sort_asc.
       MESSAGE 'MC_FC_SORT_ASC' TYPE 'S'.
       SORT alv_table ASCENDING BY ('AEDAT').
-    WHEN ycl_gui_alv_grid=>mc_fc_sort_dsc.
+    WHEN zcl_gui_alv_grid=>mc_fc_sort_dsc.
       MESSAGE 'MC_FC_SORT_DSC' TYPE 'S'.
       SORT alv_table DESCENDING BY ('AEDAT')..
   ENDCASE.

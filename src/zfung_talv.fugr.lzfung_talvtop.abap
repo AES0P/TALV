@@ -4,8 +4,8 @@ FUNCTION-POOL zfung_talv.                        "MESSAGE-ID ..
 
 
 "talv
-DATA talv_stack TYPE STANDARD TABLE OF REF TO ycl_talv_parent.
-DATA talv TYPE REF TO ycl_talv_parent.
+DATA talv_stack TYPE STANDARD TABLE OF REF TO zcl_talv_parent.
+DATA talv TYPE REF TO zcl_talv_parent.
 
 DATA ok_code TYPE sy-ucomm.
 DATA dynnr TYPE sy-dynnr.

@@ -1,21 +1,21 @@
-class YCL_TALV_SERVICE definition
-  public
-  final
-  create public .
+CLASS zcl_talv_service DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces YIF_GENERATE_TALV_IMP .
-protected section.
-private section.
+    INTERFACES zif_generate_talv_imp .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 
 
-CLASS YCL_TALV_SERVICE IMPLEMENTATION.
+CLASS ZCL_TALV_SERVICE IMPLEMENTATION.
 
 
-  METHOD yif_generate_talv_imp~generate_talv.
+  METHOD zif_generate_talv_imp~generate_talv.
 
     DATA dynnr(4) TYPE n VALUE '8999'.
 
@@ -45,7 +45,7 @@ CLASS YCL_TALV_SERVICE IMPLEMENTATION.
 
     CLEAR key-container_position.
 
-    CREATE OBJECT talv TYPE ycl_talv
+    CREATE OBJECT talv TYPE zcl_talv
       EXPORTING
         talv_key = key.
 

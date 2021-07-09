@@ -34,7 +34,7 @@ CLASS lcl_this IMPLEMENTATION.
     key-ddic_type     = 'EKKO'.
 
     "工厂模式生成TALV并直接展示
-    ycl_talv_factory=>get_talv( key )->display( ).
+    zcl_talv_factory=>get_talv( key )->display( ).
 
   ENDMETHOD.
 

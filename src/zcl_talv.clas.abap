@@ -1,27 +1,27 @@
-class YCL_TALV definition
-  public
-  inheriting from YCL_TALV_PARENT
-  final
-  create public .
+CLASS zcl_talv DEFINITION
+  PUBLIC
+  INHERITING FROM zcl_talv_parent
+  FINAL
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  methods DISPLAY_POPUP
-    importing
-      value(START_ROW) type I optional
-      value(START_COLUMN) type I optional
-      value(END_ROW) type I optional
-      value(END_COLUMN) type I optional .
+    METHODS display_popup
+      IMPORTING
+        VALUE(start_row)    TYPE i OPTIONAL
+        VALUE(start_column) TYPE i OPTIONAL
+        VALUE(end_row)      TYPE i OPTIONAL
+        VALUE(end_column)   TYPE i OPTIONAL .
 
-  methods DISPLAY
-    redefinition .
+    METHODS display
+        REDEFINITION .
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
 
 
 
-CLASS YCL_TALV IMPLEMENTATION.
+CLASS ZCL_TALV IMPLEMENTATION.
 
 
   METHOD display.

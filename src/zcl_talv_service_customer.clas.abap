@@ -1,21 +1,21 @@
-class YCL_TALV_SERVICE_CUSTOMER definition
-  public
-  final
-  create public .
+CLASS zcl_talv_service_customer DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces YIF_GENERATE_TALV_IMP .
-protected section.
-private section.
+    INTERFACES zif_generate_talv_imp .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 
 
-CLASS YCL_TALV_SERVICE_CUSTOMER IMPLEMENTATION.
+CLASS ZCL_TALV_SERVICE_CUSTOMER IMPLEMENTATION.
 
 
-  METHOD yif_generate_talv_imp~generate_talv.
+  METHOD zif_generate_talv_imp~generate_talv.
 
     IF key-container IS NOT BOUND OR key-dynnr IS INITIAL OR key-container_position = '00'.
       MESSAGE '必须传递容器、容器位置和屏幕编号！' TYPE 'E'.
@@ -25,7 +25,7 @@ CLASS YCL_TALV_SERVICE_CUSTOMER IMPLEMENTATION.
       MESSAGE '不能超过创建上限36' TYPE 'E'.
     ENDIF.
 
-    CREATE OBJECT talv TYPE ycl_talv
+    CREATE OBJECT talv TYPE zcl_talv
       EXPORTING
         talv_key = key.
 

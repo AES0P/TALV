@@ -59,13 +59,13 @@ CLASS lcl_this IMPLEMENTATION.
     key-style_table_name = 'STYLE'.
 
     "工厂模式生成TALV并直接展示
-    ycl_talv_factory=>get_talv( key )->display( ).
+    zcl_talv_factory=>get_talv( key )->display( ).
 
   ENDMETHOD.
 
 ENDCLASS.
 
-FORM frm_9000_handle_on_pbo USING talv TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_on_pbo USING talv TYPE REF TO zcl_talv_parent
                          CHANGING alv_table TYPE STANDARD TABLE.
 
   talv->save_fields( 'BOX LIGHT EBELN BUKRS BSTYP BSART LOEKZ AEDAT ERNAM' ).
@@ -94,7 +94,7 @@ FORM frm_9000_handle_retrieve USING pv_ddic_type TYPE tabname
 
 ENDFORM.
 
-FORM frm_9000_handle_changed_over USING talv TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_changed_over USING talv TYPE REF TO zcl_talv_parent
                                         pv_modified   TYPE char01
                                         pt_good_cells TYPE lvc_t_modi
                                CHANGING alv_table TYPE STANDARD TABLE.
@@ -111,7 +111,7 @@ ENDFORM.
 *&---------------------------------------------------------------------*
 *& text
 *&---------------------------------------------------------------------*
-FORM frm_9000_set_style  USING talv TYPE REF TO ycl_talv_parent
+FORM frm_9000_set_style  USING talv TYPE REF TO zcl_talv_parent
                       CHANGING alv_table TYPE STANDARD TABLE.
 
   FIELD-SYMBOLS <table> TYPE lcl_this=>tty_ekko.
@@ -129,18 +129,18 @@ FORM frm_9000_set_style  USING talv TYPE REF TO ycl_talv_parent
 
       <table_line>-light = icon_led_red.
 
-      talv->add_line_style( style = ycl_gui_alv_grid=>mc_style_disabled
+      talv->add_line_style( style = zcl_gui_alv_grid=>mc_style_disabled
          )->add_line_color( 3 ).
 
     ELSE.
 
       <table_line>-light    = icon_led_green.
 
-      talv->add_line_style( style     = ycl_gui_alv_grid=>mc_style_disabled
+      talv->add_line_style( style     = zcl_gui_alv_grid=>mc_style_disabled
          )->add_line_style( fieldname = 'BUKRS'"指定列名则只对该列生效，不指定则全部列生效
-                            style     = ycl_gui_alv_grid=>mc_style_enabled
-                            style2    = ycl_gui_alv_grid=>mc_style_hotspot
-                            style4    = ycl_gui_alv_grid=>mc_style4_link ).
+                            style     = zcl_gui_alv_grid=>mc_style_enabled
+                            style2    = zcl_gui_alv_grid=>mc_style_hotspot
+                            style4    = zcl_gui_alv_grid=>mc_style4_link ).
 
       talv->add_line_color( fieldname = 'BUKRS' col = 6
          )->add_line_color( fieldname = 'BUKRS' col = 5 ).
@@ -148,7 +148,7 @@ FORM frm_9000_set_style  USING talv TYPE REF TO ycl_talv_parent
     ENDIF.
 
     talv->add_line_style( fieldname = CONV fieldname( talv->get_key_info( 'CHECKBOX_NAME' ) )"不冻结选择框
-                          style     = ycl_gui_alv_grid=>mc_style_enabled ).
+                          style     = zcl_gui_alv_grid=>mc_style_enabled ).
 
     "针对指定行修改
     talv->set_style_for_single_line( index ).

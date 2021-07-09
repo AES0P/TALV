@@ -30,9 +30,9 @@ CLASS lcl_this IMPLEMENTATION.
   METHOD main.
 
     "工厂模式生成TALV并直接展示
-    ycl_talv_factory=>get_talv( VALUE #(  type                  = 'TALV'
+    zcl_talv_factory=>get_talv( VALUE #(  type                  = 'TALV'
                                           ddic_type             = lcl_this=>ddic
-                                          ui_func               = VALUE #( ( ycl_gui_alv_grid=>mc_fc_loc_undo ) )
+                                          ui_func               = VALUE #( ( zcl_gui_alv_grid=>mc_fc_loc_undo ) )
                                           show_long_text_button = abap_true
                                           style_table_name      = 'STYLE'  ) )->display( ).
 
@@ -40,7 +40,7 @@ CLASS lcl_this IMPLEMENTATION.
 
 ENDCLASS.
 
-FORM frm_9000_handle_on_pbo USING talv      TYPE REF TO ycl_talv_parent
+FORM frm_9000_handle_on_pbo USING talv      TYPE REF TO zcl_talv_parent
                          CHANGING alv_table TYPE STANDARD TABLE.
 
   DATA(fcat) = talv->get_fieldcat( ).

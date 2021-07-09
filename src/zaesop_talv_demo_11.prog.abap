@@ -49,7 +49,7 @@ CLASS lcl_this IMPLEMENTATION.
         DATA(row) = sy-index.
 
         "工厂模式生成TALV并直接添加到集合
-        talvs->add( ycl_talv_factory=>get_talv( VALUE #( type                         = 'TALV_CUS'
+        talvs->add( zcl_talv_factory=>get_talv( VALUE #( type                         = 'TALV_CUS'
                                                          ddic_type                    = 'EKKO'
                                                          dynnr                        = '9300'
                                                          checkbox_name                = 'BOX'
@@ -72,7 +72,7 @@ CLASS lcl_this IMPLEMENTATION.
     DATA(iterator) = talvs->get_iterator( ).
 
     WHILE iterator->has_next( ).
-      CAST ycl_talv_parent( iterator->get_next( ) )->display( ).
+      CAST zcl_talv_parent( iterator->get_next( ) )->display( ).
     ENDWHILE.
 
     CALL SCREEN 9300.
@@ -92,7 +92,7 @@ FORM f9300_11_handle_retrieve USING ddic_type TYPE tabname
 ENDFORM.
 
 
-FORM f9300_11_handle_on_pbo USING talv TYPE REF TO ycl_talv_parent
+FORM f9300_11_handle_on_pbo USING talv TYPE REF TO zcl_talv_parent
                          CHANGING alv_table TYPE STANDARD TABLE.
 
   DATA(fieldcat) = talv->get_fieldcat( )."生成TALV后仍可修改其字段目录 及每个字段的属性
@@ -105,7 +105,7 @@ FORM f9300_11_handle_on_pbo USING talv TYPE REF TO ycl_talv_parent
 
 ENDFORM.
 
-FORM f9300_11_handle_top_of_page USING talv TYPE REF TO ycl_talv_parent
+FORM f9300_11_handle_top_of_page USING talv TYPE REF TO zcl_talv_parent
                                        document TYPE REF TO cl_dd_document
                                        table_index TYPE syindex
                               CHANGING alv_table TYPE STANDARD TABLE.
@@ -117,7 +117,7 @@ FORM f9300_11_handle_top_of_page USING talv TYPE REF TO ycl_talv_parent
 
 ENDFORM.
 
-FORM f9300_11_handle_changed_over USING talv TYPE REF TO ycl_talv_parent
+FORM f9300_11_handle_changed_over USING talv TYPE REF TO zcl_talv_parent
                                         pv_modified   TYPE char01
                                         pt_good_cells TYPE lvc_t_modi
                                CHANGING alv_table TYPE STANDARD TABLE.
@@ -139,18 +139,18 @@ FORM f9300_11_handle_changed_over USING talv TYPE REF TO ycl_talv_parent
 
       <light> = icon_led_red.
 
-      talv->add_line_style( style = ycl_gui_alv_grid=>mc_style_disabled ).
+      talv->add_line_style( style = zcl_gui_alv_grid=>mc_style_disabled ).
       talv->add_line_color( 3 ).
 
     ELSE.
 
       <light>    = icon_led_green.
 
-      talv->add_line_style( style     = ycl_gui_alv_grid=>mc_style_disabled ).
+      talv->add_line_style( style     = zcl_gui_alv_grid=>mc_style_disabled ).
       talv->add_line_style( fieldname = 'MENGE'"指定列名则只对该列生效，不指定则全部列生效
-                            style     = ycl_gui_alv_grid=>mc_style_enabled
-                            style2    = ycl_gui_alv_grid=>mc_style_hotspot
-                            style4    = ycl_gui_alv_grid=>mc_style4_link ).
+                            style     = zcl_gui_alv_grid=>mc_style_enabled
+                            style2    = zcl_gui_alv_grid=>mc_style_hotspot
+                            style4    = zcl_gui_alv_grid=>mc_style4_link ).
 
       talv->add_line_color( 6 ).
       talv->add_line_color( fieldname = 'MENGE' col = 5 ).
@@ -158,7 +158,7 @@ FORM f9300_11_handle_changed_over USING talv TYPE REF TO ycl_talv_parent
     ENDIF.
 
     talv->add_line_style( fieldname = CONV fieldname( talv->get_key_info( 'CHECKBOX_NAME' ) )"不冻结选择框
-                          style     = ycl_gui_alv_grid=>mc_style_enabled ).
+                          style     = zcl_gui_alv_grid=>mc_style_enabled ).
 
     "针对指定行修改
     talv->set_style_for_single_line( index ).
@@ -172,7 +172,7 @@ FORM f9300_11_handle_changed_over USING talv TYPE REF TO ycl_talv_parent
 ENDFORM.
 
 
-FORM f9300_11_handle_hotspot_click USING talv TYPE REF TO ycl_talv_parent
+FORM f9300_11_handle_hotspot_click USING talv TYPE REF TO zcl_talv_parent
                                          e_row      TYPE lvc_s_row
                                          e_column   TYPE lvc_s_col
                                          es_sub_row TYPE lvc_s_roid
@@ -192,8 +192,8 @@ FORM f9300_11_handle_hotspot_click USING talv TYPE REF TO ycl_talv_parent
 
   EXPORT ebeln = <ebeln> TO MEMORY ID 'EBELN'.
 
-  DATA popup TYPE REF TO ycl_talv.
-  popup ?= ycl_talv_factory=>get_talv( key ).
+  DATA popup TYPE REF TO zcl_talv.
+  popup ?= zcl_talv_factory=>get_talv( key ).
 
   popup->display_popup( start_column = 10
                         start_row    = 5
@@ -234,7 +234,7 @@ MODULE user_command_9300 INPUT.
 
     DATA(iterator) = lcl_this=>talvs->get_iterator( ).
     WHILE iterator->has_next( ).
-      CAST ycl_talv_parent( iterator->get_next( ) )->free( ).
+      CAST zcl_talv_parent( iterator->get_next( ) )->free( ).
     ENDWHILE.
 
     FREE iterator.
