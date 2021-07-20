@@ -21,39 +21,39 @@ CLASS zcl_talv_json_handler DEFINITION
 
     METHODS json_to_kvtab
       IMPORTING
-        VALUE(json)         TYPE string
-        VALUE(split_symbol) TYPE c DEFAULT ','
+        !json         TYPE string
+        !split_symbol TYPE c DEFAULT ','
       RETURNING
-        VALUE(kvtab)        TYPE string_table .
+        VALUE(kvtab)  TYPE string_table .
     METHODS kvtab_to_json
       IMPORTING
-        VALUE(kvtab)        TYPE string_table
+        !kvtab              TYPE string_table
         VALUE(split_symbol) TYPE c
       RETURNING
         VALUE(json)         TYPE string .
     METHODS kvtab_to_fieldcats
       IMPORTING
-        VALUE(kvtab)     TYPE string_table
+        !kvtab           TYPE string_table
       RETURNING
         VALUE(fieldcats) TYPE zif_talv_json_handler~tty_kv .
     METHODS fieldcats_to_kvtab
       IMPORTING
-        VALUE(fieldcats) TYPE zif_talv_json_handler~tty_kv
+        !fieldcats   TYPE zif_talv_json_handler~tty_kv
       RETURNING
-        VALUE(kvtab)     TYPE string_table .
+        VALUE(kvtab) TYPE string_table .
     METHODS kv_to_fieldcat
       IMPORTING
-        VALUE(kv)       TYPE string_table
+        !kv             TYPE string_table
       RETURNING
         VALUE(fieldcat) TYPE zif_talv_json_handler~ty_kv .
     METHODS fieldcat_to_kv
       IMPORTING
-        VALUE(fieldcat) TYPE zif_talv_json_handler~ty_kv
+        !fieldcat TYPE zif_talv_json_handler~ty_kv
       RETURNING
-        VALUE(kv)       TYPE string .
+        VALUE(kv) TYPE string .
     METHODS fieldcats_to_talv
       IMPORTING
-        VALUE(fieldcats) TYPE zif_talv_json_handler~tty_kv
+        !fieldcats       TYPE zif_talv_json_handler~tty_kv
         VALUE(talv_type) TYPE zdetalv_type OPTIONAL
       RETURNING
         VALUE(talv)      TYPE REF TO zcl_talv_parent .

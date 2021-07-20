@@ -16,11 +16,11 @@ INTERFACE zif_talv_json_handler
 
   METHODS json_to_talv
     IMPORTING
-      VALUE(json)         TYPE string
-      VALUE(split_symbol) TYPE c DEFAULT ','
-      VALUE(talv_type)    TYPE zdetalv_type OPTIONAL
+      !json         TYPE string
+      !split_symbol TYPE c DEFAULT ','
+      !talv_type    TYPE zdetalv_type OPTIONAL
     RETURNING
-      VALUE(talv)         TYPE REF TO zcl_talv_parent .
+      VALUE(talv)   TYPE REF TO zcl_talv_parent .
   METHODS talv_to_json
     IMPORTING
       VALUE(talv)         TYPE REF TO zcl_talv_parent

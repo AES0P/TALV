@@ -36,60 +36,60 @@ CLASS zcl_log DEFINITION
 
     CLASS-METHODS get_instance
       IMPORTING
-        VALUE(object)      TYPE balobj_d
-        VALUE(subobject)   TYPE balsubobj
-        VALUE(msg_ext)     TYPE balnrext OPTIONAL
-        VALUE(auto_commit) TYPE abap_bool DEFAULT abap_true
+        !object      TYPE balobj_d
+        !subobject   TYPE balsubobj
+        !msg_ext     TYPE balnrext OPTIONAL
+        !auto_commit TYPE abap_bool DEFAULT abap_true
       RETURNING
-        VALUE(log)         TYPE REF TO zcl_log .
+        VALUE(log)   TYPE REF TO zcl_log .
     METHODS get_table
       RETURNING
         VALUE(table) TYPE tty_log_detail .
     METHODS msg .
     METHODS success
       IMPORTING
-        VALUE(content) TYPE c
+        !content   TYPE c
       RETURNING
-        VALUE(log)     TYPE REF TO zcl_log .
+        VALUE(log) TYPE REF TO zcl_log .
     METHODS info
       IMPORTING
-        VALUE(content) TYPE c
+        !content   TYPE c
       RETURNING
-        VALUE(log)     TYPE REF TO zcl_log .
+        VALUE(log) TYPE REF TO zcl_log .
     METHODS warning
       IMPORTING
-        VALUE(content) TYPE c
+        !content   TYPE c
       RETURNING
-        VALUE(log)     TYPE REF TO zcl_log .
+        VALUE(log) TYPE REF TO zcl_log .
     METHODS error
       IMPORTING
-        VALUE(content) TYPE c
+        !content   TYPE c
       RETURNING
-        VALUE(log)     TYPE REF TO zcl_log .
+        VALUE(log) TYPE REF TO zcl_log .
     METHODS debug
       IMPORTING
-        VALUE(uname) TYPE sy-uname
+        !uname     TYPE sy-uname
       RETURNING
-        VALUE(log)   TYPE REF TO zcl_log .
+        VALUE(log) TYPE REF TO zcl_log .
     METHODS exception
       IMPORTING
-        VALUE(exception) TYPE REF TO cx_root .
+        !exception TYPE REF TO cx_root .
     METHODS return
       IMPORTING
-        VALUE(return)       TYPE any
-        VALUE(mapping_rule) TYPE tty_mapping_rule OPTIONAL
+        !return       TYPE any
+        !mapping_rule TYPE tty_mapping_rule OPTIONAL
       RETURNING
-        VALUE(log)          TYPE REF TO zcl_log .
+        VALUE(log)    TYPE REF TO zcl_log .
     METHODS insert_message_to_table
       IMPORTING
-        VALUE(message) TYPE recamsg .
+        !message TYPE recamsg .
     METHODS commit .
     METHODS add_bal_log_msg
       IMPORTING
-        VALUE(message) TYPE recamsg .
+        !message TYPE recamsg .
     METHODS is_valid_level
       IMPORTING
-        VALUE(level)          TYPE recamsg-detlevel
+        !level                TYPE recamsg-detlevel
       RETURNING
         VALUE(is_valid_level) TYPE abap_bool .
     METHODS get_salv
@@ -99,21 +99,21 @@ CLASS zcl_log DEFINITION
         VALUE(salv) TYPE REF TO cl_salv_table .
     METHODS display_as_alv_popup
       IMPORTING
-        VALUE(start_column) TYPE i DEFAULT 5
-        VALUE(start_line)   TYPE i DEFAULT 5
-        VALUE(end_column)   TYPE i DEFAULT 120
-        VALUE(end_line)     TYPE i DEFAULT 25 .
+        !start_column TYPE i DEFAULT 5
+        !start_line   TYPE i DEFAULT 5
+        !end_column   TYPE i DEFAULT 120
+        !end_line     TYPE i DEFAULT 25 .
     METHODS display_in_slg1
       IMPORTING
-        VALUE(amodal) TYPE abap_bool OPTIONAL .
+        !amodal TYPE abap_bool OPTIONAL .
     METHODS display_using_dbtable
       IMPORTING
-        VALUE(table_name) TYPE tablenam
-        VALUE(where)      TYPE c OPTIONAL .
+        !table_name TYPE tablenam
+        !where      TYPE c OPTIONAL .
     METHODS table_to_string
       IMPORTING
-        VALUE(table)  TYPE ANY TABLE
-        VALUE(field)  TYPE fieldname
+        !table        TYPE ANY TABLE
+        !field        TYPE fieldname
       RETURNING
         VALUE(string) TYPE string .
     METHODS free .
@@ -130,10 +130,10 @@ CLASS zcl_log DEFINITION
 
     METHODS constructor
       IMPORTING
-        VALUE(object)      TYPE balobj_d
-        VALUE(subobject)   TYPE balsubobj
-        VALUE(msg_ext)     TYPE balnrext
-        VALUE(auto_commit) TYPE abap_bool OPTIONAL .
+        !object      TYPE balobj_d
+        !subobject   TYPE balsubobj
+        !msg_ext     TYPE balnrext
+        !auto_commit TYPE abap_bool OPTIONAL .
 ENDCLASS.
 
 

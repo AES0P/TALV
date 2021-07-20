@@ -40,30 +40,30 @@ CLASS zcl_dynamic_tool DEFINITION
         !ip_table TYPE REF TO data .
     CLASS-METHODS create_dynamic_table
       IMPORTING
-        VALUE(talv_key)         TYPE zstalv_key OPTIONAL
-        VALUE(fieldcatalog)     TYPE lvc_t_fcat OPTIONAL
-        VALUE(checkbox_name)    TYPE c OPTIONAL
-        VALUE(style_table_name) TYPE c OPTIONAL
-        VALUE(length_in_byte)   TYPE boolean OPTIONAL
+        !talv_key         TYPE zstalv_key OPTIONAL
+        !fieldcatalog     TYPE lvc_t_fcat OPTIONAL
+        !checkbox_name    TYPE c OPTIONAL
+        !style_table_name TYPE c OPTIONAL
+        !length_in_byte   TYPE boolean OPTIONAL
       RETURNING
-        VALUE(data_table)       TYPE REF TO data .
+        VALUE(data_table) TYPE REF TO data .
     METHODS transfer_lvc_fcat_to_kkblo
       IMPORTING
-        VALUE(fieldcat_lvc)   TYPE lvc_t_fcat
+        !fieldcat_lvc         TYPE lvc_t_fcat
       RETURNING
         VALUE(fieldcat_kkblo) TYPE kkblo_t_fieldcat .
     METHODS create_table_by_fieldcat
       IMPORTING
-        VALUE(fieldcats)             TYPE kkblo_t_fieldcat
-        VALUE(object)                TYPE any
-        VALUE(class_name)            TYPE any
-        VALUE(class_method)          TYPE c
-        VALUE(checkbox_name)         TYPE c
-        VALUE(light_name)            TYPE c
-        VALUE(cell_color_table_name) TYPE c
-        VALUE(style_table)           TYPE c
-        VALUE(tabname)               TYPE kkblo_tabname
-        VALUE(length_in_byte)        TYPE boolean .
+        VALUE(fieldcats)       TYPE kkblo_t_fieldcat
+        !object                TYPE any
+        !class_name            TYPE any
+        !class_method          TYPE c
+        !checkbox_name         TYPE c
+        !light_name            TYPE c
+        !cell_color_table_name TYPE c
+        !style_table           TYPE c
+        !tabname               TYPE kkblo_tabname
+        !length_in_byte        TYPE boolean .
     METHODS get_table_components_by_data
       IMPORTING
         VALUE(table)      TYPE STANDARD TABLE
@@ -71,12 +71,12 @@ CLASS zcl_dynamic_tool DEFINITION
         VALUE(components) TYPE cl_abap_structdescr=>component_table .
     METHODS get_struc_components_by_data
       IMPORTING
-        VALUE(wa)         TYPE any
+        !wa               TYPE any
       RETURNING
         VALUE(components) TYPE cl_abap_structdescr=>component_table .
     METHODS get_components_by_global_type
       IMPORTING
-        VALUE(type_name)  TYPE c
+        !type_name        TYPE c
       RETURNING
         VALUE(components) TYPE cl_abap_structdescr=>component_table .
     METHODS get_components_base
@@ -91,12 +91,12 @@ CLASS zcl_dynamic_tool DEFINITION
         VALUE(info) TYPE tcomp_info .
     METHODS get_component_info_base
       IMPORTING
-        !componentdescr   TYPE abap_componentdescr
-        !rettype          TYPE char1 OPTIONAL
+        !componentdescr TYPE abap_componentdescr
+        !rettype        TYPE char1 OPTIONAL
       EXPORTING
-        VALUE(field_info) TYPE dfies
+        !field_info     TYPE dfies
       RETURNING
-        VALUE(text)       TYPE string .
+        VALUE(text)     TYPE string .
     METHODS convert_components_to_fieldcat
       IMPORTING
         !components      TYPE cl_abap_structdescr=>component_table

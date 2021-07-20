@@ -7,5 +7,4 @@ INTERFACE zif_generate_talv_imp
       VALUE(key)  TYPE zstalv_key
     RETURNING
       VALUE(talv) TYPE REF TO zcl_talv_parent .
-
 ENDINTERFACE.

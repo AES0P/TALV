@@ -7,7 +7,7 @@ CLASS zcl_talv_factory DEFINITION
 
     CLASS-METHODS get_talv
       IMPORTING
-        VALUE(key)  TYPE zstalv_key
+        !key        TYPE zstalv_key
       RETURNING
         VALUE(talv) TYPE REF TO zcl_talv_parent .
   PROTECTED SECTION.

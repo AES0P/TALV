@@ -8,10 +8,10 @@ CLASS zcl_talv DEFINITION
 
     METHODS display_popup
       IMPORTING
-        VALUE(start_row)    TYPE i OPTIONAL
-        VALUE(start_column) TYPE i OPTIONAL
-        VALUE(end_row)      TYPE i OPTIONAL
-        VALUE(end_column)   TYPE i OPTIONAL .
+        !start_row    TYPE i OPTIONAL
+        !start_column TYPE i OPTIONAL
+        !end_row      TYPE i OPTIONAL
+        !end_column   TYPE i OPTIONAL .
 
     METHODS display
         REDEFINITION .
