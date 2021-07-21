@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_INTF" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOINTERF>
+    <CLSNAME>ZIF_TR_TOOL</CLSNAME>
+    <LANGU>1</LANGU>
+    <DESCRIPT>tr tool</DESCRIPT>
+    <EXPOSURE>2</EXPOSURE>
+    <STATE>1</STATE>
+    <UNICODE>X</UNICODE>
+   </VSEOINTERF>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CLSNAME>ZIF_TR_TOOL</CLSNAME>
+     <CMPNAME>ASSOCIATE</CMPNAME>
+     <LANGU>1</LANGU>
+     <DESCRIPT>ASSOCIATE TR</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZIF_TR_TOOL</CLSNAME>
+     <CMPNAME>COMMIT</CMPNAME>
+     <LANGU>1</LANGU>
+     <DESCRIPT>COMMIT TASK</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZIF_TR_TOOL</CLSNAME>
+     <CMPNAME>ENTRY</CMPNAME>
+     <LANGU>1</LANGU>
+     <DESCRIPT>ADD TABLE ENTRY</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZIF_TR_TOOL</CLSNAME>
+     <CMPNAME>ENTRYS</CMPNAME>
+     <LANGU>1</LANGU>
+     <DESCRIPT>ADD TABLE ENTRYS</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZIF_TR_TOOL</CLSNAME>
+     <CMPNAME>TTY_E071</CMPNAME>
+     <LANGU>1</LANGU>
+     <DESCRIPT>更改 &amp; 的传输系统: 请求/任务的对象条目</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZIF_TR_TOOL</CLSNAME>
+     <CMPNAME>TTY_E071K</CMPNAME>
+     <LANGU>1</LANGU>
+     <DESCRIPT>更改 &amp; 传输系统: 请求/任务的代码条目</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZIF_TR_TOOL</CLSNAME>
+     <CMPNAME>TY_E071</CMPNAME>
+     <LANGU>1</LANGU>
+     <DESCRIPT>更改 &amp; 的传输系统: 请求/任务的对象条目</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CLSNAME>ZIF_TR_TOOL</CLSNAME>
+     <CMPNAME>TY_E071K</CMPNAME>
+     <LANGU>1</LANGU>
+     <DESCRIPT>更改 &amp; 传输系统: 请求/任务的代码条目</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>
