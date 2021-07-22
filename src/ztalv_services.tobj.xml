@@ -35,8 +35,21 @@
      <TYPE>1</TYPE>
      <LISTE>0001</LISTE>
      <BASTAB>X</BASTAB>
-     <FLAG>X</FLAG>
     </TVDIR>
+    <TVIMF>
+     <TVIMF>
+      <TABNAME>ZTALV_SERVICE</TABNAME>
+      <EVENT>10</EVENT>
+     </TVIMF>
+     <TVIMF>
+      <TABNAME>ZTALV_SERVICE</TABNAME>
+      <EVENT>11</EVENT>
+     </TVIMF>
+     <TVIMF>
+      <TABNAME>ZTALV_SERVICE</TABNAME>
+      <EVENT>12</EVENT>
+     </TVIMF>
+    </TVIMF>
    </TOBJ>
   </asx:values>
  </asx:abap>

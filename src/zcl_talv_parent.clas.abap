@@ -4,7 +4,7 @@ class ZCL_TALV_PARENT definition
   create public
 
   global friends ZCL_GUI_ALV_GRID
-                 ZCL_TALV_EVENT_HANDLER .
+                 ZIF_TALV_EVENT_HANDLE_IMP .
 
 public section.
 
@@ -180,7 +180,7 @@ private section.
   data STYLE_TABLE type LVC_T_STYL .
   data COLOR_TABLE type LVC_T_SCOL .
   data INTERCEPT_UCOMM type TTY_INTERCEPT_UCOMM .
-  data EVENT_HANDLER type ref to ZCL_TALV_EVENT_HANDLER .
+  data EVENT_HANDLER type ref to ZIF_TALV_EVENT_HANDLE_IMP .
 
   methods SET_BTN_STYLE_FOR_ALL_LINE .
   methods SET_BTN_STYLE_FOR_SINGLE_LINE
@@ -1024,9 +1024,13 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
     "单元格更改触发
     grid->register_edit_event( grid->mc_evt_modified ).
 
-    CREATE OBJECT event_handler
-      EXPORTING
-        talv = me.
+    IF key-event_handler IS NOT BOUND.
+      CREATE OBJECT event_handler TYPE zcl_talv_event_handler
+        EXPORTING
+          talv = me.
+    ELSE.
+      event_handler = key-event_handler.
+    ENDIF.
 
     SET HANDLER event_handler->on_handle_toolbar           FOR grid.
     SET HANDLER event_handler->on_handle_user_command      FOR grid.
@@ -1040,9 +1044,9 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
 
     SET HANDLER event_handler->on_set_pf_status FOR me.
     SET HANDLER event_handler->on_set_title     FOR me.
-    SET HANDLER event_handler->zif_talv_event_handle_imp~on_pbo  FOR me.
+    SET HANDLER event_handler->on_pbo           FOR me.
     SET HANDLER event_handler->on_pai_command   FOR me.
-    SET HANDLER event_handler->zif_talv_event_handle_imp~on_exit FOR me.
+    SET HANDLER event_handler->on_exit          FOR me.
 
     SET HANDLER event_handler->on_retrieve      FOR me.
 

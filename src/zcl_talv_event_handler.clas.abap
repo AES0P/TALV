@@ -1,44 +1,47 @@
-CLASS zcl_talv_event_handler DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PUBLIC .
+class ZCL_TALV_EVENT_HANDLER definition
+  public
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    INTERFACES zif_talv_event_handle_imp .
+  interfaces ZIF_TALV_EVENT_HANDLE_IMP .
 
-    ALIASES on_handle_changed_finished
-      FOR zif_talv_event_handle_imp~on_handle_changed_finished .
-    ALIASES on_handle_countdown_finished
-      FOR zif_talv_event_handle_imp~on_handle_countdown_finished .
-    ALIASES on_handle_data_changed
-      FOR zif_talv_event_handle_imp~on_handle_data_changed .
-    ALIASES on_handle_double_click
-      FOR zif_talv_event_handle_imp~on_handle_double_click .
-    ALIASES on_handle_grid_dispatch
-      FOR zif_talv_event_handle_imp~on_handle_grid_dispatch .
-    ALIASES on_handle_hotspot_click
-      FOR zif_talv_event_handle_imp~on_handle_hotspot_click .
-    ALIASES on_handle_line_button_click
-      FOR zif_talv_event_handle_imp~on_handle_line_button_click .
-    ALIASES on_handle_toolbar
-      FOR zif_talv_event_handle_imp~on_handle_toolbar .
-    ALIASES on_handle_top_of_page
-      FOR zif_talv_event_handle_imp~on_handle_top_of_page .
-    ALIASES on_handle_user_command
-      FOR zif_talv_event_handle_imp~on_handle_user_command .
-    ALIASES on_pai_command
-      FOR zif_talv_event_handle_imp~on_pai_command .
-    ALIASES on_retrieve
-      FOR zif_talv_event_handle_imp~on_retrieve .
-    ALIASES on_set_pf_status
-      FOR zif_talv_event_handle_imp~on_set_pf_status .
-    ALIASES on_set_title
-      FOR zif_talv_event_handle_imp~on_set_title .
+  aliases ON_HANDLE_CHANGED_FINISHED
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_CHANGED_FINISHED .
+  aliases ON_HANDLE_COUNTDOWN_FINISHED
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_COUNTDOWN_FINISHED .
+  aliases ON_HANDLE_DATA_CHANGED
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_DATA_CHANGED .
+  aliases ON_HANDLE_DOUBLE_CLICK
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_DOUBLE_CLICK .
+  aliases ON_HANDLE_GRID_DISPATCH
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_GRID_DISPATCH .
+  aliases ON_HANDLE_HOTSPOT_CLICK
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_HOTSPOT_CLICK .
+  aliases ON_HANDLE_LINE_BUTTON_CLICK
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_LINE_BUTTON_CLICK .
+  aliases ON_HANDLE_TOOLBAR
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_TOOLBAR .
+  aliases ON_HANDLE_TOP_OF_PAGE
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_TOP_OF_PAGE .
+  aliases ON_HANDLE_USER_COMMAND
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_USER_COMMAND .
+  aliases ON_PAI_COMMAND
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_PAI_COMMAND .
+  aliases ON_RETRIEVE
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_RETRIEVE .
+  aliases ON_SET_PF_STATUS
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_SET_PF_STATUS .
+  aliases ON_SET_TITLE
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_SET_TITLE .
+  aliases ON_EXIT
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_EXIT .
+  aliases ON_PBO
+    for ZIF_TALV_EVENT_HANDLE_IMP~ON_PBO .
 
-    METHODS constructor
-      IMPORTING
-        !talv TYPE REF TO zcl_talv_parent .
+  methods CONSTRUCTOR
+    importing
+      !TALV type ref to ZCL_TALV_PARENT .
   PROTECTED SECTION.
   PRIVATE SECTION.
 

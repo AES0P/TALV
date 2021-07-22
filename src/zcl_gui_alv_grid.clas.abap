@@ -4,8 +4,8 @@ class ZCL_GUI_ALV_GRID definition
   final
   create public
 
-  global friends ZCL_TALV_EVENT_HANDLER
-                 ZCL_TALV_PARENT .
+  global friends ZCL_TALV_PARENT
+                 ZIF_TALV_EVENT_HANDLE_IMP .
 
 public section.
 
