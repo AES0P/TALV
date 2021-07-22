@@ -2,7 +2,7 @@
 An ALV report framework based on ABAP 
 
 ## Step 1
-Run 'abapgit'（ https://docs.abapgit.org/ ） program in your SAP dev client,create a new online repository,and input follow git repository URL:
+Run 'abapgit'（ https://docs.abapgit.org ） program in your SAP dev client,create a new online repository,and input follow git repository URL:
 
 https://github.com/AES0P/TALV
 
