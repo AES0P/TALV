@@ -232,7 +232,7 @@ CLASS ZCL_DYNAMIC_TOOL IMPLEMENTATION.
     ENDIF.
 
     this->create_table_by_fieldcat( object                = this
-                                    class_name            = 'Zcl_dynamic_tool'
+                                    class_name            = 'ZCL_DYNAMIC_TOOL'
                                     class_method          = 'INTERNAL_RECEIVER'
                                     fieldcats             = this->transfer_lvc_fcat_to_kkblo( fieldcats )
                                     checkbox_name         = checkbox
@@ -596,7 +596,7 @@ CLASS ZCL_DYNAMIC_TOOL IMPLEMENTATION.
                     'EXPORTING IP_TABLE = POINTER.'
                INTO code_line SEPARATED BY space.
       ELSE.
-        CONCATENATE 'CALL METHOD Zcl_dynamic_tool=>'
+        CONCATENATE 'CALL METHOD ZCL_DYNAMIC_TOOL=>'
                     class_method
                INTO code_line.
 
@@ -622,7 +622,7 @@ CLASS ZCL_DYNAMIC_TOOL IMPLEMENTATION.
     CASE sy-subrc.
       WHEN 0.
       WHEN 9.
-        MESSAGE x000(0k) WITH 'generate_subpool_dir_full'.
+        MESSAGE x000(0k) WITH 'GENERATE_SUBPOOL_DIR_FULL'.
       WHEN OTHERS.
         MESSAGE x000(0k) WITH message line word.
     ENDCASE.

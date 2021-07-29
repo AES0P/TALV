@@ -389,7 +389,7 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
     ELSEIF structure_name IS NOT INITIAL.
 
       CLEAR: key-fieldcat.
-      CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
+      CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'  ##FM_SUBRC_OK
         EXPORTING
           i_structure_name       = structure_name
         CHANGING
@@ -807,7 +807,7 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
           header_container,
           container.
 
-    DATA dynnr(4) TYPE n VALUE ''.
+    DATA dynnr(4) TYPE n VALUE IS INITIAL.
     CASE key-type.
       WHEN 'TALV'.
 
@@ -925,15 +925,15 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
     READ TABLE key-fieldcat INTO fieldcat WITH KEY fieldname = fieldname.
     CHECK fieldcat IS NOT INITIAL.
 
-    DATA text TYPE string.
-    text = value.
-
     DATA title TYPE sy-title.
     IF fieldcat-coltext IS NOT INITIAL.
       title = fieldcat-coltext.
     ELSE.
       title = fieldcat-scrtext_l.
     ENDIF.
+
+    DATA text TYPE string.
+    text = value.
 
     CALL FUNCTION 'ZFM_EDIT_LONG_TEXT_FIELD'
       EXPORTING
@@ -943,9 +943,8 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
         i_wordwrap_position = 132
       CHANGING
         c_text              = text.
-    IF sy-subrc = 0.
-      value = text.
-    ENDIF.
+
+    value = text.
 
   ENDMETHOD.
 

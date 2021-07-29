@@ -73,6 +73,11 @@ CLASS ZCL_TR_TABLE_ENTRY IMPLEMENTATION.
 
     clear( ).
 
+    IF task IS NOT INITIAL.
+      is_ok = abap_true.
+      RETURN.
+    ENDIF.
+
     CALL FUNCTION 'TRINT_ORDER_CHOICE'
       EXPORTING
         wi_order_type          = 'W'
@@ -218,9 +223,15 @@ CLASS ZCL_TR_TABLE_ENTRY IMPLEMENTATION.
 
   METHOD zif_tr_tool~entrys.
 
+    tr_tool = me.
+
     CHECK table IS NOT INITIAL.
 
-    DATA(tabname)    = dynamic_tool->get_table_relative_name( table ).
+    IF ddic_type IS SUPPLIED.
+      DATA(tabname) = ddic_type.
+    ELSE.
+      tabname = dynamic_tool->get_table_relative_name( table ).
+    ENDIF.
     DATA(key_fields) = dynamic_tool->get_table_key_fields( tabname ).
 
     DATA tabkey TYPE trobj_name.
@@ -236,6 +247,5 @@ CLASS ZCL_TR_TABLE_ENTRY IMPLEMENTATION.
       entry( objname = tabname tabkey = tabkey ).
     ENDLOOP.
 
-    tr_tool = me.
   ENDMETHOD.
 ENDCLASS.

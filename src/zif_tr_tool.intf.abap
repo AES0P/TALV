@@ -15,6 +15,7 @@ interface ZIF_TR_TOOL
   methods ENTRYS
     importing
       !TABLE type TABLE
+      value(DDIC_TYPE) type TROBJ_NAME optional
     returning
       value(TR_TOOL) type ref to ZIF_TR_TOOL .
   methods ENTRY

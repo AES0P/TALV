@@ -25,9 +25,10 @@ FUNCTION zfm_talv_display.
       STARTING AT start_column start_row
         ENDING AT end_column   end_row.
     ELSE.
+      "STARTING AT col1 lin1 [ENDING AT col2  lin2]
       CALL SCREEN dynnr
       STARTING AT 10 5
-        ENDING AT 145 20.
+        ENDING AT 150 25.
     ENDIF.
   ENDIF.
 
