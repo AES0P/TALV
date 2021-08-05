@@ -14,11 +14,11 @@ CLASS lcl_this DEFINITION CREATE PUBLIC.
 
     "定义此结构是为了方便读者理解本例中系统会构造出什么样的内表
     TYPES: BEGIN OF ty_ekko.
-    TYPES: box(1)   TYPE c,
-           light(4) TYPE c,
-           color    TYPE lvc_t_scol,
-           style    TYPE lvc_t_styl.
-           INCLUDE  TYPE ekko.
+             INCLUDE  TYPE ekko.
+    TYPES:   box(1)   TYPE c,
+             light(4) TYPE c,
+             style    TYPE lvc_t_styl,
+             color    TYPE lvc_t_scol.
     TYPES: END OF ty_ekko.
 
     TYPES tty_ekko TYPE STANDARD TABLE OF ty_ekko WITH DEFAULT KEY.

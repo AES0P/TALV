@@ -5,7 +5,7 @@ CLASS zcl_talv_service_popup DEFINITION
 
   PUBLIC SECTION.
 
-    INTERFACES zif_generate_talv_imp .
+    INTERFACES zif_talv_generate_imp .
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
@@ -15,7 +15,7 @@ ENDCLASS.
 CLASS ZCL_TALV_SERVICE_POPUP IMPLEMENTATION.
 
 
-  METHOD zif_generate_talv_imp~generate_talv.
+  METHOD zif_talv_generate_imp~generate_talv.
 
     DATA dynnr(4) TYPE n VALUE '9899'.
 

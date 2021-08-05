@@ -1,47 +1,49 @@
-class ZCL_TALV_EVENT_HANDLER definition
-  public
-  create public .
+CLASS zcl_talv_event_handler DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_TALV_EVENT_HANDLE_IMP .
+    INTERFACES zif_talv_event_handle_imp .
 
-  aliases ON_HANDLE_CHANGED_FINISHED
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_CHANGED_FINISHED .
-  aliases ON_HANDLE_COUNTDOWN_FINISHED
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_COUNTDOWN_FINISHED .
-  aliases ON_HANDLE_DATA_CHANGED
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_DATA_CHANGED .
-  aliases ON_HANDLE_DOUBLE_CLICK
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_DOUBLE_CLICK .
-  aliases ON_HANDLE_GRID_DISPATCH
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_GRID_DISPATCH .
-  aliases ON_HANDLE_HOTSPOT_CLICK
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_HOTSPOT_CLICK .
-  aliases ON_HANDLE_LINE_BUTTON_CLICK
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_LINE_BUTTON_CLICK .
-  aliases ON_HANDLE_TOOLBAR
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_TOOLBAR .
-  aliases ON_HANDLE_TOP_OF_PAGE
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_TOP_OF_PAGE .
-  aliases ON_HANDLE_USER_COMMAND
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_HANDLE_USER_COMMAND .
-  aliases ON_PAI_COMMAND
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_PAI_COMMAND .
-  aliases ON_RETRIEVE
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_RETRIEVE .
-  aliases ON_SET_PF_STATUS
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_SET_PF_STATUS .
-  aliases ON_SET_TITLE
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_SET_TITLE .
-  aliases ON_EXIT
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_EXIT .
-  aliases ON_PBO
-    for ZIF_TALV_EVENT_HANDLE_IMP~ON_PBO .
+    ALIASES on_exit
+      FOR zif_talv_event_handle_imp~on_exit .
+    ALIASES on_handle_changed_finished
+      FOR zif_talv_event_handle_imp~on_handle_changed_finished .
+    ALIASES on_handle_countdown_finished
+      FOR zif_talv_event_handle_imp~on_handle_countdown_finished .
+    ALIASES on_handle_data_changed
+      FOR zif_talv_event_handle_imp~on_handle_data_changed .
+    ALIASES on_handle_double_click
+      FOR zif_talv_event_handle_imp~on_handle_double_click .
+    ALIASES on_handle_grid_dispatch
+      FOR zif_talv_event_handle_imp~on_handle_grid_dispatch .
+    ALIASES on_handle_hotspot_click
+      FOR zif_talv_event_handle_imp~on_handle_hotspot_click .
+    ALIASES on_handle_line_button_click
+      FOR zif_talv_event_handle_imp~on_handle_line_button_click .
+    ALIASES on_handle_toolbar
+      FOR zif_talv_event_handle_imp~on_handle_toolbar .
+    ALIASES on_handle_top_of_page
+      FOR zif_talv_event_handle_imp~on_handle_top_of_page .
+    ALIASES on_handle_user_command
+      FOR zif_talv_event_handle_imp~on_handle_user_command .
+    ALIASES on_pai_command
+      FOR zif_talv_event_handle_imp~on_pai_command .
+    ALIASES on_pbo
+      FOR zif_talv_event_handle_imp~on_pbo .
+    ALIASES on_retrieve
+      FOR zif_talv_event_handle_imp~on_retrieve .
+    ALIASES on_set_pf_status
+      FOR zif_talv_event_handle_imp~on_set_pf_status .
+    ALIASES on_set_title
+      FOR zif_talv_event_handle_imp~on_set_title .
+    ALIASES on_check_long_text
+      FOR zif_talv_event_handle_imp~on_check_long_text .
 
-  methods CONSTRUCTOR
-    importing
-      !TALV type ref to ZCL_TALV_PARENT .
+    METHODS constructor
+      IMPORTING
+        !talv TYPE REF TO zcl_talv_parent .
   PROTECTED SECTION.
   PRIVATE SECTION.
 
@@ -210,6 +212,7 @@ CLASS ZCL_TALV_EVENT_HANDLER IMPLEMENTATION.
       talv->handle_long_text_field(
         EXPORTING
           fieldname = fieldname
+          row       = es_row_no-row_id
         CHANGING
           value     = <value> ).
 
@@ -342,5 +345,18 @@ CLASS ZCL_TALV_EVENT_HANDLER IMPLEMENTATION.
     PERFORM (talv->key-handle_set_title)
  IN PROGRAM (talv->key-program)
    IF FOUND.
+  ENDMETHOD.
+
+
+  METHOD zif_talv_event_handle_imp~on_check_long_text.
+
+    PERFORM (talv->key-handle_check_long_text)
+ IN PROGRAM (talv->key-program)
+      USING talv
+            fieldname
+            row
+            long_text
+   IF FOUND.
+
   ENDMETHOD.
 ENDCLASS.

@@ -21,7 +21,7 @@ CLASS ZCL_TALV_FACTORY IMPLEMENTATION.
 
   METHOD get_talv.
 
-    DATA: generate_talv_service TYPE REF TO zif_generate_talv_imp.
+    DATA: generate_talv_service TYPE REF TO zif_talv_generate_imp.
     DATA: service TYPE seoclsname.
 
     SELECT SINGLE clsname

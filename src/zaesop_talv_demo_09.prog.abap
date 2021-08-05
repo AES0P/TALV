@@ -61,3 +61,12 @@ FORM frm_9000_handle_retrieve USING ddic_type TYPE tabname
     UP TO 10 ROWS.
 
 ENDFORM.
+
+FORM frm_9000_check_long_text USING talv      TYPE REF TO zcl_talv_parent
+                                    fieldname TYPE fieldname
+                                    row       TYPE int4
+                                    long_text TYPE string.
+
+  MESSAGE row && '行' && fieldname  && ':' && long_text TYPE 'S'.
+
+ENDFORM.

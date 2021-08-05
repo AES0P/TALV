@@ -62,6 +62,11 @@ CLASS zcl_talv_json_handler DEFINITION
         !talv            TYPE REF TO zcl_talv_parent
       RETURNING
         VALUE(fieldcats) TYPE zif_talv_json_handler~tty_kv .
+    METHODS check_json_format_simple
+      IMPORTING
+        VALUE(json) TYPE string
+      RETURNING
+        VALUE(msg)  TYPE string .
   PROTECTED SECTION.
 
   PRIVATE SECTION.
@@ -92,7 +97,7 @@ CLASS ZCL_TALV_JSON_HANDLER IMPLEMENTATION.
 
     DATA fieldcatalog TYPE lvc_t_fcat.
     MOVE-CORRESPONDING fieldcats TO fieldcatalog.
-    table = zcl_dynamic_tool=>create_dynamic_table( fieldcatalog = fieldcatalog ).
+    table = zcl_dynamic_tool=>create_dynamic_table_by_rttc( fieldcatalog = fieldcatalog ).
 
     FIELD-SYMBOLS: <table>      TYPE STANDARD TABLE,
                    <table_line> TYPE any,
@@ -180,6 +185,8 @@ CLASS ZCL_TALV_JSON_HANDLER IMPLEMENTATION.
 
 
   METHOD json_to_kvtab.
+
+    CHECK json IS NOT INITIAL.
 
     SPLIT json AT split_symbol INTO TABLE kvtab.
     IF kvtab IS INITIAL.
@@ -383,6 +390,46 @@ CLASS ZCL_TALV_JSON_HANDLER IMPLEMENTATION.
              kvtab        = fieldcats_to_kvtab(
                               fieldcats = talv_to_fieldcats( talv ) )
              split_symbol = split_symbol ).
+
+  ENDMETHOD.
+
+
+  METHOD check_json_format_simple.
+
+    DATA kvtab TYPE string_table.
+    DATA kvline TYPE string.
+
+    kvtab = json_to_kvtab( json ).
+
+    LOOP AT kvtab INTO kvline.
+
+      DATA kv TYPE string_table.
+      CLEAR: kv.
+      SPLIT kvline AT ':' INTO TABLE kv.
+
+      "校验key
+      DATA kv_key TYPE string.
+      READ TABLE kv INTO kv_key INDEX 1.
+      CONDENSE kv_key NO-GAPS.
+
+      IF lines( kv ) < 2.
+        msg =  kv_key && '未发现键值对.'.
+      ENDIF.
+
+      DATA length TYPE i.
+      length = strlen( kv_key ) - 1.
+
+      IF NOT ( kv_key+0(1) = '"' AND kv_key+length(1) = '"' ).
+        msg = msg && kv_key && '的引号不正确.'.
+      ENDIF.
+
+    ENDLOOP.
+
+    "校验结尾符
+    length = strlen( json ) - 1.
+    IF  json+length(1) = '，' OR json+length(1) = ','.
+      msg = msg && '结尾符' && json+length(1) && '非法.'.
+    ENDIF.
 
   ENDMETHOD.
 ENDCLASS.

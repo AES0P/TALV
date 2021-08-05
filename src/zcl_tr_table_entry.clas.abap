@@ -1,45 +1,45 @@
-class ZCL_TR_TABLE_ENTRY definition
-  public
-  final
-  create private .
+CLASS zcl_tr_table_entry DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PRIVATE .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_TR_TOOL .
+    INTERFACES zif_tr_tool .
 
-  aliases ASSOCIATE
-    for ZIF_TR_TOOL~ASSOCIATE .
-  aliases COMMIT
-    for ZIF_TR_TOOL~COMMIT .
-  aliases ENTRY
-    for ZIF_TR_TOOL~ENTRY .
-  aliases ENTRYS
-    for ZIF_TR_TOOL~ENTRYS .
-  aliases TTY_E071
-    for ZIF_TR_TOOL~TTY_E071 .
-  aliases TTY_E071K
-    for ZIF_TR_TOOL~TTY_E071K .
-  aliases TY_E071
-    for ZIF_TR_TOOL~TY_E071 .
-  aliases TY_E071K
-    for ZIF_TR_TOOL~TY_E071K .
+    ALIASES associate
+      FOR zif_tr_tool~associate .
+    ALIASES commit
+      FOR zif_tr_tool~commit .
+    ALIASES entry
+      FOR zif_tr_tool~entry .
+    ALIASES entrys
+      FOR zif_tr_tool~entrys .
+    ALIASES tty_e071
+      FOR zif_tr_tool~tty_e071 .
+    ALIASES tty_e071k
+      FOR zif_tr_tool~tty_e071k .
+    ALIASES ty_e071
+      FOR zif_tr_tool~ty_e071 .
+    ALIASES ty_e071k
+      FOR zif_tr_tool~ty_e071k .
 
-  methods CONSTRUCTOR .
-  class-methods GET_INSTANCE
-    returning
-      value(OBJECT) type ref to ZCL_TR_TABLE_ENTRY .
-  methods CLEAR .
+    METHODS constructor .
+    CLASS-METHODS get_instance
+      RETURNING
+        VALUE(object) TYPE REF TO zcl_tr_table_entry .
+    METHODS clear .
   PROTECTED SECTION.
-private section.
+  PRIVATE SECTION.
 
-  class-data INSTANCE type ref to ZCL_TR_TABLE_ENTRY .
-  data E071 type TTY_E071 .
-  data E071K type TTY_E071K .
-  data ORDER type E071-TRKORR .
-  data TASK type E071-TRKORR .
-  data PGMID type PGMID value 'R3TR' ##NO_TEXT.
-  data OBJECT type TROBJTYPE value 'TABU' ##NO_TEXT.
-  data DYNAMIC_TOOL type ref to ZCL_DYNAMIC_TOOL .
+    CLASS-DATA instance TYPE REF TO zcl_tr_table_entry .
+    DATA e071 TYPE tty_e071 .
+    DATA e071k TYPE tty_e071k .
+    DATA order TYPE e071-trkorr .
+    DATA task TYPE e071-trkorr .
+    DATA pgmid TYPE pgmid VALUE 'R3TR' ##NO_TEXT.
+    DATA object TYPE trobjtype VALUE 'TABU' ##NO_TEXT.
+    DATA dynamic_tool TYPE REF TO zcl_dynamic_tool .
 ENDCLASS.
 
 
