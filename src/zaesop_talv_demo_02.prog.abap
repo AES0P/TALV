@@ -164,7 +164,6 @@ FORM frm_9000_handle_user_command USING talv      TYPE REF TO zcl_talv_parent
                                CHANGING alv_table TYPE STANDARD TABLE.
 
   MESSAGE pv_ucomm TYPE 'S'.
-  talv->refresh( ).
 
 ENDFORM.
 
@@ -175,7 +174,6 @@ FORM frm_9000_handle_hotspot_click USING talv       TYPE REF TO zcl_talv_parent
                                 CHANGING alv_table  TYPE STANDARD TABLE.
 
   MESSAGE 'hotspot click' TYPE 'S'.
-  talv->refresh( ).
 
 ENDFORM.
 
@@ -185,7 +183,6 @@ FORM frm_9000_handle_double_click USING talv      TYPE REF TO zcl_talv_parent
                                CHANGING alv_table TYPE STANDARD TABLE.
 
   MESSAGE 'double click' TYPE 'S'.
-  talv->refresh( ).
 
 ENDFORM.
 

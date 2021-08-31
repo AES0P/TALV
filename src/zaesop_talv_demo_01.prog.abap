@@ -31,7 +31,7 @@ CLASS lcl_this IMPLEMENTATION.
     "ALV类型：全屏
     key-type          = 'TALV'.
     "数据字典类型 可动态指定
-    key-ddic_type     = 'EKKO'.
+    key-ddic_type     = 'RSAU_BUF_DATA'.
 
     "工厂模式生成TALV并直接展示
     zcl_talv_factory=>get_talv( key )->display( ).

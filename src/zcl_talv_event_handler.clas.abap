@@ -102,17 +102,19 @@ CLASS ZCL_TALV_EVENT_HANDLER IMPLEMENTATION.
    CHANGING <table>
    IF FOUND.
 
-    talv->grid->set_selected_rows( it_index_rows = index_rows
-                                   it_row_no     = row_no ).
-
-    talv->grid->set_selected_columns( it_col_table = columns ).
-
     CHECK talv->key-style_table_name IS NOT INITIAL.
     FIELD-SYMBOLS <table_line> TYPE any.
     LOOP AT <table> ASSIGNING <table_line>.
       talv->set_btn_style_for_single_line( CHANGING alv_line = <table_line> ).
     ENDLOOP.
     talv->refresh( ).
+
+    talv->grid->set_selected_rows( it_index_rows = index_rows
+                                   it_row_no     = row_no ).
+
+    talv->grid->set_selected_columns( it_col_table = columns ).
+
+    cl_gui_cfw=>flush( ).
 
   ENDMETHOD.
 

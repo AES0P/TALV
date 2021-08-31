@@ -27,7 +27,7 @@ CLASS ZCL_TALV_FACTORY IMPLEMENTATION.
     SELECT SINGLE clsname
       FROM ztalv_service
       INTO service
-     WHERE type = key-type.
+     WHERE type = key-type.                          "#EC CI_SEL_NESTED
 
     CREATE OBJECT generate_talv_service TYPE (service).
 
