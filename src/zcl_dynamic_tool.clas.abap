@@ -480,9 +480,12 @@ CLASS ZCL_DYNAMIC_TOOL IMPLEMENTATION.
     SELECT fieldname
       FROM dd03l
       INTO TABLE key_fields
-     WHERE tabname = tabname
-       AND keyflag = abap_true
-     ORDER BY position.
+     WHERE tabname  = tabname
+       AND as4local = 'A'
+       AND keyflag  = abap_true
+     ORDER BY fieldname.
+
+    DELETE ADJACENT DUPLICATES FROM key_fields COMPARING ALL FIELDS.
 
   ENDMETHOD.
 

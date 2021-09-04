@@ -1,67 +1,72 @@
-CLASS zcl_gui_alv_grid DEFINITION
-  PUBLIC
-  INHERITING FROM cl_gui_alv_grid
-  FINAL
-  CREATE PUBLIC
+class ZCL_GUI_ALV_GRID definition
+  public
+  inheriting from CL_GUI_ALV_GRID
+  final
+  create public
 
-  GLOBAL FRIENDS zcl_talv_parent
-                 zif_talv_event_handle_imp .
+  global friends ZCL_TALV_PARENT
+                 ZIF_TALV_EVENT_HANDLE_IMP .
 
-  PUBLIC SECTION.
+public section.
 
-    EVENTS grid_dispatch
-      EXPORTING
-        VALUE(action) TYPE sy-ucomm .
+  events GRID_DISPATCH
+    exporting
+      value(ACTION) type SY-UCOMM .
 
-    METHODS constructor
-      IMPORTING
-        !talv             TYPE REF TO zcl_talv_parent
-        !i_shellstyle     TYPE i DEFAULT 0
-        !i_lifetime       TYPE i OPTIONAL
-        !i_parent         TYPE REF TO cl_gui_container
-        !i_appl_events    TYPE char01 DEFAULT space
-        !i_parentdbg      TYPE REF TO cl_gui_container OPTIONAL
-        !i_applogparent   TYPE REF TO cl_gui_container OPTIONAL
-        !i_graphicsparent TYPE REF TO cl_gui_container OPTIONAL
-        !i_name           TYPE string OPTIONAL
-        !i_fcat_complete  TYPE sap_bool DEFAULT space
-      EXCEPTIONS
-        error_cntl_create
-        error_cntl_init
-        error_cntl_link
-        error_dp_create .
-    METHODS ready_for_it
-      IMPORTING
-        !i_buffer_active      TYPE any OPTIONAL
-        !i_bypassing_buffer   TYPE char01 OPTIONAL
-        !i_consistency_check  TYPE char1 OPTIONAL
-        !i_structure_name     TYPE dd02l-tabname OPTIONAL
-        !i_save               TYPE char01 DEFAULT 'A'
-        !i_default            TYPE char01 DEFAULT 'X'
-        !is_print             TYPE lvc_s_prnt OPTIONAL
-        !it_special_groups    TYPE lvc_t_sgrp OPTIONAL
-        !it_toolbar_excluding TYPE ui_functions OPTIONAL
-        !it_hyperlink         TYPE lvc_t_hype OPTIONAL
-        !it_alv_graphics      TYPE dtc_t_tc OPTIONAL
-        !it_except_qinfo      TYPE lvc_t_qinf OPTIONAL
-        !ir_salv_adapter      TYPE REF TO if_salv_adapter OPTIONAL
-      CHANGING
-        !ct_sort              TYPE lvc_t_sort OPTIONAL
-        !ct_filter            TYPE lvc_t_filt OPTIONAL
-      EXCEPTIONS
-        invalid_parameter_combination
-        program_error
-        too_many_lines .
+  methods CONSTRUCTOR
+    importing
+      !TALV type ref to ZCL_TALV_PARENT
+      !I_SHELLSTYLE type I default 0
+      !I_LIFETIME type I optional
+      !I_PARENT type ref to CL_GUI_CONTAINER
+      !I_APPL_EVENTS type CHAR01 default SPACE
+      !I_PARENTDBG type ref to CL_GUI_CONTAINER optional
+      !I_APPLOGPARENT type ref to CL_GUI_CONTAINER optional
+      !I_GRAPHICSPARENT type ref to CL_GUI_CONTAINER optional
+      !I_NAME type STRING optional
+      !I_FCAT_COMPLETE type SAP_BOOL default SPACE
+    exceptions
+      ERROR_CNTL_CREATE
+      ERROR_CNTL_INIT
+      ERROR_CNTL_LINK
+      ERROR_DP_CREATE .
+  methods READY_FOR_IT
+    importing
+      !I_BUFFER_ACTIVE type ANY optional
+      !I_BYPASSING_BUFFER type CHAR01 optional
+      !I_CONSISTENCY_CHECK type CHAR1 optional
+      !I_STRUCTURE_NAME type DD02L-TABNAME optional
+      !I_SAVE type CHAR01 default 'A'
+      !I_DEFAULT type CHAR01 default 'X'
+      !IS_PRINT type LVC_S_PRNT optional
+      !IT_SPECIAL_GROUPS type LVC_T_SGRP optional
+      !IT_TOOLBAR_EXCLUDING type UI_FUNCTIONS optional
+      !IT_HYPERLINK type LVC_T_HYPE optional
+      !IT_ALV_GRAPHICS type DTC_T_TC optional
+      !IT_EXCEPT_QINFO type LVC_T_QINF optional
+      !IR_SALV_ADAPTER type ref to IF_SALV_ADAPTER optional
+    changing
+      !CT_SORT type LVC_T_SORT optional
+      !CT_FILTER type LVC_T_FILT optional
+    exceptions
+      INVALID_PARAMETER_COMBINATION
+      PROGRAM_ERROR
+      TOO_MANY_LINES .
+  methods READ_LAYOUT_SETTING
+    importing
+      !OBJ_ID type ZTALV_LAYOUT_SET-OBJ_ID default '0' .
 
-    METHODS dispatch
-        REDEFINITION .
-    METHODS finalize
-        REDEFINITION .
+  methods DISPATCH
+    redefinition .
+  methods FINALIZE
+    redefinition .
   PROTECTED SECTION.
-  PRIVATE SECTION.
+private section.
 
-    DATA outtab TYPE REF TO data .
-    DATA talv TYPE REF TO zcl_talv_parent .
+  data OUTTAB type ref to DATA .
+  data TALV type ref to ZCL_TALV_PARENT .
+
+  methods READ_FIELDS_SETTING .
 ENDCLASS.
 
 
@@ -145,6 +150,10 @@ CLASS ZCL_GUI_ALV_GRID IMPLEMENTATION.
     FIELD-SYMBOLS <outtab> TYPE STANDARD TABLE.
     ASSIGN outtab->* TO <outtab>.
 
+    read_layout_setting( ).
+
+    read_fields_setting( ).
+
     set_table_for_first_display(
        EXPORTING
          i_buffer_active               = i_buffer_active
@@ -154,7 +163,7 @@ CLASS ZCL_GUI_ALV_GRID IMPLEMENTATION.
          is_variant                    = talv->get_variant( )
          i_save                        = i_save
          i_default                     = i_default
-         is_layout                     = talv->get_layout( )
+         is_layout                     = talv->key-layout
          is_print                      = is_print
          it_special_groups             = it_special_groups
          it_toolbar_excluding          = talv->get_ui_func( )
@@ -174,6 +183,35 @@ CLASS ZCL_GUI_ALV_GRID IMPLEMENTATION.
          OTHERS                        = 4 ).
     IF sy-subrc <> 0.
     ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD read_fields_setting.
+
+    FIELD-SYMBOLS <fields_setting> LIKE LINE OF talv->fields_setting.
+    FIELD-SYMBOLS <fieldcat> TYPE lvc_s_fcat.
+
+    LOOP AT talv->fields_setting ASSIGNING <fields_setting>.
+
+      READ TABLE talv->key-fieldcat ASSIGNING <fieldcat> WITH KEY fieldname = <fields_setting>-fieldname.
+      CHECK sy-subrc = 0.
+
+      MOVE-CORRESPONDING <fields_setting> TO <fieldcat>.
+
+    ENDLOOP.
+
+  ENDMETHOD.
+
+
+  METHOD read_layout_setting.
+
+    FIELD-SYMBOLS <layout_setting> LIKE LINE OF talv->layout_setting.
+
+    READ TABLE talv->layout_setting ASSIGNING <layout_setting> WITH KEY obj_id = obj_id.
+    CHECK sy-subrc = 0.
+
+    MOVE-CORRESPONDING <layout_setting> TO talv->key-layout.
 
   ENDMETHOD.
 ENDCLASS.

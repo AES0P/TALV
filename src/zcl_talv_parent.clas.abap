@@ -1,175 +1,187 @@
-CLASS zcl_talv_parent DEFINITION
-  PUBLIC
-  ABSTRACT
-  CREATE PUBLIC
+class ZCL_TALV_PARENT definition
+  public
+  abstract
+  create public
 
-  GLOBAL FRIENDS zcl_gui_alv_grid
-                 zif_talv_event_handle_imp .
+  global friends ZCL_GUI_ALV_GRID
+                 ZIF_TALV_EVENT_HANDLE_IMP .
 
-  PUBLIC SECTION.
+public section.
 
-    TYPES:
-      BEGIN OF ty_intercept_ucomm,
+  types:
+    BEGIN OF ty_intercept_ucomm,
         action TYPE sy-ucomm,
       END OF ty_intercept_ucomm .
-    TYPES:
-      tty_intercept_ucomm TYPE STANDARD TABLE OF ty_intercept_ucomm WITH EMPTY KEY .
-    TYPES:
-      BEGIN OF ty_fieldname,
+  types:
+    tty_intercept_ucomm TYPE STANDARD TABLE OF ty_intercept_ucomm WITH EMPTY KEY .
+  types:
+    BEGIN OF ty_fieldname,
         fieldname TYPE fieldname,
       END OF ty_fieldname .
-    TYPES:
-      tty_fieldname TYPE STANDARD TABLE OF ty_fieldname WITH EMPTY KEY .
+  types:
+    tty_fieldname TYPE STANDARD TABLE OF ty_fieldname WITH EMPTY KEY .
+  types TY_FIELDS_SETTING type ZTALV_FIELDS_SET .
+  types:
+    tty_fields_setting TYPE STANDARD TABLE OF ty_fields_setting WITH EMPTY KEY .
+  types TY_LAYOUT_SETTING type ZTALV_LAYOUT_SET .
+  types:
+    tty_layout_setting TYPE STANDARD TABLE OF ty_layout_setting WITH EMPTY KEY .
 
-    EVENTS set_pf_status .
-    EVENTS set_title .
-    EVENTS on_pbo .
-    EVENTS pai_command
-      EXPORTING
-        VALUE(e_ucomm) TYPE sy-ucomm .
-    EVENTS on_exit .
-    EVENTS retrieve .
-    EVENTS check_long_text
-      EXPORTING
-        VALUE(fieldname) TYPE fieldname
-        VALUE(row) TYPE int4
-        VALUE(long_text) TYPE string .
+  events SET_PF_STATUS .
+  events SET_TITLE .
+  events ON_PBO .
+  events PAI_COMMAND
+    exporting
+      value(E_UCOMM) type SY-UCOMM .
+  events ON_EXIT .
+  events RETRIEVE .
+  events CHECK_LONG_TEXT
+    exporting
+      value(FIELDNAME) type FIELDNAME
+      value(ROW) type INT4
+      value(LONG_TEXT) type STRING .
 
-    METHODS constructor
-      IMPORTING
-        !talv_key TYPE zstalv_key .
-    METHODS get_key_info
-      IMPORTING
-        !fieldname        TYPE fieldname
-      RETURNING
-        VALUE(fieldvalue) TYPE fieldvalue .
-    METHODS set_fieldcat
-      IMPORTING
-        VALUE(fieldcat) TYPE lvc_t_fcat OPTIONAL
-        !structure_name TYPE tabname OPTIONAL
-          PREFERRED PARAMETER fieldcat .
-    METHODS get_fieldcat
-      RETURNING
-        VALUE(fieldcat) TYPE lvc_t_fcat .
-    METHODS remove_fields
-      IMPORTING
-        VALUE(fields) TYPE c .
-    METHODS save_fields
-      IMPORTING
-        VALUE(fields) TYPE c .
-    METHODS set_column_editable
-      IMPORTING
-        !fieldname  TYPE fieldname
-      RETURNING
-        VALUE(talv) TYPE REF TO zcl_talv_parent .
-    METHODS set_layout
-      IMPORTING
-        VALUE(layout) TYPE lvc_s_layo .
-    METHODS get_layout
-      RETURNING
-        VALUE(layout) TYPE lvc_s_layo .
-    METHODS set_variant
-      IMPORTING
-        VALUE(variant) TYPE disvariant .
-    METHODS get_variant
-      RETURNING
-        VALUE(variant) TYPE disvariant .
-    METHODS set_ui_func
-      IMPORTING
-        VALUE(remove_all) TYPE abap_bool OPTIONAL
-        VALUE(ui_func)    TYPE ui_functions OPTIONAL .
-    METHODS get_ui_func
-      RETURNING
-        VALUE(ui_func) TYPE ui_functions .
-    METHODS get_grid
-      RETURNING
-        VALUE(grid) TYPE REF TO zcl_gui_alv_grid .
-    METHODS set_interval
-      IMPORTING
-        VALUE(interval) TYPE i .
-    METHODS get_interval
-      RETURNING
-        VALUE(interval) TYPE i .
-    METHODS get_log
-      RETURNING
-        VALUE(log) TYPE REF TO zcl_log .
-    METHODS get_outtab
-      RETURNING
-        VALUE(outtab) TYPE REF TO data .
-    METHODS refresh .
-    METHODS add_button
-      IMPORTING
-        !fun_code  TYPE ui_func
-        !btn_type  TYPE tb_btype
-        !icon      TYPE any
-        !text      TYPE text40 OPTIONAL
-        !quickinfo TYPE iconquick OPTIONAL
-        !object    TYPE REF TO cl_alv_event_toolbar_set .
-    METHODS set_header_document
-      IMPORTING
-        VALUE(doc) TYPE REF TO cl_dd_document .
-    METHODS get_header_document
-      RETURNING
-        VALUE(doc) TYPE REF TO cl_dd_document .
-    METHODS display
-        ABSTRACT .
-    METHODS pai
-      CHANGING
-        !ucomm TYPE sy-ucomm .
-    METHODS pbo .
-    METHODS init_style
-      IMPORTING
-        !edit TYPE abap_bool OPTIONAL .
-    METHODS add_line_style
-      IMPORTING
-        !fieldname  TYPE lvc_s_styl-fieldname OPTIONAL
-        !style      TYPE lvc_style
-        !style2     TYPE lvc_style OPTIONAL
-        !style3     TYPE lvc_style OPTIONAL
-        !style4     TYPE lvc_style OPTIONAL
-        !maxlen     TYPE int4 OPTIONAL
-      RETURNING
-        VALUE(talv) TYPE REF TO zcl_talv_parent .
-    METHODS set_style_for_all_lines .
-    METHODS set_style_for_single_line
-      IMPORTING
-        !index TYPE i .
-    METHODS get_style_table
-      RETURNING
-        VALUE(style_table) TYPE lvc_t_styl .
-    METHODS set_style_table
-      IMPORTING
-        !style_table TYPE lvc_t_styl .
-    METHODS clear_line_style_table .
-    METHODS init_color
-      IMPORTING
-        !color TYPE lvc_col .
-    METHODS add_line_color
-      IMPORTING
-        !fieldname  TYPE lvc_s_styl-fieldname OPTIONAL
-        !col        TYPE lvc_col
-        !int        TYPE lvc_int OPTIONAL
-        !inv        TYPE lvc_inv OPTIONAL
-        !nokeycol   TYPE lvc_nokeyc OPTIONAL
-      RETURNING
-        VALUE(talv) TYPE REF TO zcl_talv_parent .
-    METHODS set_color_for_all_lines .
-    METHODS set_color_for_single_line
-      IMPORTING
-        !index TYPE i .
-    METHODS get_color_table
-      RETURNING
-        VALUE(color_table) TYPE lvc_t_scol .
-    METHODS set_color_table
-      IMPORTING
-        !color_table TYPE lvc_t_scol .
-    METHODS clear_line_color_table .
-    METHODS init_fieldcat .
-    METHODS is_initialized
-      RETURNING
-        VALUE(initialized) TYPE abap_bool .
-    METHODS on_retrieve .
-    METHODS free .
+  methods CONSTRUCTOR
+    importing
+      !TALV_KEY type ZSTALV_KEY .
+  methods GET_FIELDS_SETTING
+    returning
+      value(FIELDS_SETTING) type TTY_FIELDS_SETTING .
+  methods GET_LAYOUT_SETTING
+    returning
+      value(LAYOUT_SETTING) type TTY_LAYOUT_SETTING .
+  methods GET_KEY_INFO
+    importing
+      !FIELDNAME type FIELDNAME
+    returning
+      value(FIELDVALUE) type FIELDVALUE .
+  methods SET_FIELDCAT
+    importing
+      value(FIELDCAT) type LVC_T_FCAT optional
+      !STRUCTURE_NAME type TABNAME optional
+    preferred parameter FIELDCAT .
+  methods GET_FIELDCAT
+    returning
+      value(FIELDCAT) type LVC_T_FCAT .
+  methods REMOVE_FIELDS
+    importing
+      value(FIELDS) type C .
+  methods SAVE_FIELDS
+    importing
+      value(FIELDS) type C .
+  methods SET_COLUMN_EDITABLE
+    importing
+      !FIELDNAME type FIELDNAME
+    returning
+      value(TALV) type ref to ZCL_TALV_PARENT .
+  methods SET_LAYOUT
+    importing
+      value(LAYOUT) type LVC_S_LAYO .
+  methods GET_LAYOUT
+    returning
+      value(LAYOUT) type LVC_S_LAYO .
+  methods SET_VARIANT
+    importing
+      value(VARIANT) type DISVARIANT .
+  methods GET_VARIANT
+    returning
+      value(VARIANT) type DISVARIANT .
+  methods SET_UI_FUNC
+    importing
+      value(REMOVE_ALL) type ABAP_BOOL optional
+      value(UI_FUNC) type UI_FUNCTIONS optional .
+  methods GET_UI_FUNC
+    returning
+      value(UI_FUNC) type UI_FUNCTIONS .
+  methods GET_GRID
+    returning
+      value(GRID) type ref to ZCL_GUI_ALV_GRID .
+  methods SET_INTERVAL
+    importing
+      value(INTERVAL) type I .
+  methods GET_INTERVAL
+    returning
+      value(INTERVAL) type I .
+  methods GET_LOG
+    returning
+      value(LOG) type ref to ZCL_LOG .
+  methods GET_OUTTAB
+    returning
+      value(OUTTAB) type ref to DATA .
+  methods REFRESH .
+  methods ADD_BUTTON
+    importing
+      !FUN_CODE type UI_FUNC
+      !BTN_TYPE type TB_BTYPE
+      !ICON type ANY
+      !TEXT type TEXT40 optional
+      !QUICKINFO type ICONQUICK optional
+      !OBJECT type ref to CL_ALV_EVENT_TOOLBAR_SET .
+  methods SET_HEADER_DOCUMENT
+    importing
+      value(DOC) type ref to CL_DD_DOCUMENT .
+  methods GET_HEADER_DOCUMENT
+    returning
+      value(DOC) type ref to CL_DD_DOCUMENT .
+  methods DISPLAY
+  abstract .
+  methods PAI
+    changing
+      !UCOMM type SY-UCOMM .
+  methods PBO .
+  methods INIT_STYLE
+    importing
+      !EDIT type ABAP_BOOL optional .
+  methods ADD_LINE_STYLE
+    importing
+      !FIELDNAME type LVC_S_STYL-FIELDNAME optional
+      !STYLE type LVC_STYLE
+      !STYLE2 type LVC_STYLE optional
+      !STYLE3 type LVC_STYLE optional
+      !STYLE4 type LVC_STYLE optional
+      !MAXLEN type INT4 optional
+    returning
+      value(TALV) type ref to ZCL_TALV_PARENT .
+  methods SET_STYLE_FOR_ALL_LINES .
+  methods SET_STYLE_FOR_SINGLE_LINE
+    importing
+      !INDEX type I .
+  methods GET_STYLE_TABLE
+    returning
+      value(STYLE_TABLE) type LVC_T_STYL .
+  methods SET_STYLE_TABLE
+    importing
+      !STYLE_TABLE type LVC_T_STYL .
+  methods CLEAR_LINE_STYLE_TABLE .
+  methods INIT_COLOR
+    importing
+      !COLOR type LVC_COL .
+  methods ADD_LINE_COLOR
+    importing
+      !FIELDNAME type LVC_S_STYL-FIELDNAME optional
+      !COL type LVC_COL
+      !INT type LVC_INT optional
+      !INV type LVC_INV optional
+      !NOKEYCOL type LVC_NOKEYC optional
+    returning
+      value(TALV) type ref to ZCL_TALV_PARENT .
+  methods SET_COLOR_FOR_ALL_LINES .
+  methods SET_COLOR_FOR_SINGLE_LINE
+    importing
+      !INDEX type I .
+  methods GET_COLOR_TABLE
+    returning
+      value(COLOR_TABLE) type LVC_T_SCOL .
+  methods SET_COLOR_TABLE
+    importing
+      !COLOR_TABLE type LVC_T_SCOL .
+  methods CLEAR_LINE_COLOR_TABLE .
+  methods INIT_FIELDCAT .
+  methods IS_INITIALIZED
+    returning
+      value(INITIALIZED) type ABAP_BOOL .
+  methods ON_RETRIEVE .
+  methods FREE .
   PROTECTED SECTION.
 
     DATA key TYPE zstalv_key .
@@ -179,36 +191,38 @@ CLASS zcl_talv_parent DEFINITION
     DATA log TYPE REF TO zcl_log .
     DATA timer TYPE REF TO cl_gui_timer .
     DATA grid TYPE REF TO zcl_gui_alv_grid .
-  PRIVATE SECTION.
+private section.
 
-    DATA initialized TYPE abap_bool VALUE abap_false ##NO_TEXT.
-    DATA style_table TYPE lvc_t_styl .
-    DATA color_table TYPE lvc_t_scol .
-    DATA intercept_ucomm TYPE tty_intercept_ucomm .
-    DATA event_handler TYPE REF TO zif_talv_event_handle_imp .
+  data INITIALIZED type ABAP_BOOL value ABAP_FALSE ##NO_TEXT.
+  data STYLE_TABLE type LVC_T_STYL .
+  data COLOR_TABLE type LVC_T_SCOL .
+  data INTERCEPT_UCOMM type TTY_INTERCEPT_UCOMM .
+  data EVENT_HANDLER type ref to ZIF_TALV_EVENT_HANDLE_IMP .
+  data FIELDS_SETTING type TTY_FIELDS_SETTING .
+  data LAYOUT_SETTING type TTY_LAYOUT_SETTING .
 
-    METHODS set_btn_style_for_all_line .
-    METHODS set_btn_style_for_single_line
-      CHANGING
-        !alv_line TYPE any .
-    METHODS create_table .
-    METHODS copy_table .
-    METHODS check_key_info .
-    METHODS init_event_prefix .
-    METHODS init .
-    METHODS init_grid .
-    METHODS init_event .
-    METHODS init_data .
-    METHODS set_key_info
-      IMPORTING
-        !fieldname  TYPE fieldname
-        !fieldvalue TYPE fieldvalue .
-    METHODS handle_long_text_field
-      IMPORTING
-        !fieldname TYPE fieldname
-        !row       TYPE int4
-      CHANGING
-        !value     TYPE c .
+  methods SET_BTN_STYLE_FOR_ALL_LINE .
+  methods SET_BTN_STYLE_FOR_SINGLE_LINE
+    changing
+      !ALV_LINE type ANY .
+  methods CREATE_TABLE .
+  methods COPY_TABLE .
+  methods CHECK_KEY_INFO .
+  methods INIT_EVENT_PREFIX .
+  methods INIT .
+  methods INIT_GRID .
+  methods INIT_EVENT .
+  methods INIT_DATA .
+  methods SET_KEY_INFO
+    importing
+      !FIELDNAME type FIELDNAME
+      !FIELDVALUE type FIELDVALUE .
+  methods HANDLE_LONG_TEXT_FIELD
+    importing
+      !FIELDNAME type FIELDNAME
+      !ROW type INT4
+    changing
+      !VALUE type C .
 ENDCLASS.
 
 
@@ -450,7 +464,6 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
     IF layout IS NOT INITIAL.
 
       key-layout = layout.
-      grid->set_frontend_layout( layout ).
 
     ELSE.
 
@@ -473,9 +486,9 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
         key-layout-zebra      = abap_false.  "zebra
       ENDIF.
 
-      grid->set_frontend_layout( key-layout ).
-
     ENDIF.
+
+    grid->set_frontend_layout( key-layout ).
 
   ENDMETHOD.
 
@@ -697,6 +710,10 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
 
     init_event_prefix( ).
 
+    get_layout_setting( ).
+
+    get_fields_setting( ).
+
   ENDMETHOD.
 
 
@@ -744,7 +761,10 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
 
     CHECK grid->outtab IS NOT BOUND.
 
-    IF key-style_table_name IS INITIAL AND key-checkbox_name IS INITIAL.
+    IF key-style_table_name IS INITIAL
+      AND key-ref_table_name IS INITIAL
+      AND key-ref_data_name IS INITIAL
+      AND key-checkbox_name IS INITIAL.
       CREATE DATA grid->outtab TYPE STANDARD TABLE OF (key-ddic_type).
     ELSE.
 
@@ -896,6 +916,7 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
 
   METHOD get_layout.
     grid->get_frontend_layout( IMPORTING es_layout = layout  ).
+    key-layout = layout.
   ENDMETHOD.
 
 
@@ -1304,6 +1325,40 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
     RAISE EVENT set_title.
     RAISE EVENT set_pf_status.
     RAISE EVENT on_pbo.
+
+  ENDMETHOD.
+
+
+  METHOD get_fields_setting.
+
+    CHECK key-no_read_fcat_setting = abap_false.
+
+    SELECT *
+      FROM ztalv_fields_set
+      INTO CORRESPONDING FIELDS OF TABLE me->fields_setting
+     WHERE cprog              = key-program
+       AND dynnr              = key-dynnr
+*       AND ddic_type          = key-ddic_type
+       AND container_position = key-container_position.
+
+    fields_setting = me->fields_setting.
+
+  ENDMETHOD.
+
+
+  METHOD get_layout_setting.
+
+    CHECK key-no_read_layo_setting = abap_false.
+
+    SELECT *
+      FROM ztalv_layout_set
+      INTO CORRESPONDING FIELDS OF TABLE me->layout_setting
+     WHERE cprog              = key-program
+       AND dynnr              = key-dynnr
+       AND container_position = key-container_position
+       AND obj_id             = '0'.
+
+    layout_setting = me->layout_setting.
 
   ENDMETHOD.
 ENDCLASS.

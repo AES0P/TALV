@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_DTEL" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <DD04V>
+    <ROLLNAME>ZTALVE_CON_POS</ROLLNAME>
+    <DDLANGUAGE>1</DDLANGUAGE>
+    <HEADLEN>04</HEADLEN>
+    <SCRLEN1>04</SCRLEN1>
+    <SCRLEN2>04</SCRLEN2>
+    <SCRLEN3>04</SCRLEN3>
+    <DDTEXT>TALV在屏幕中的容器位置</DDTEXT>
+    <REPTEXT>容器位置</REPTEXT>
+    <SCRTEXT_S>容器位置</SCRTEXT_S>
+    <SCRTEXT_M>容器位置</SCRTEXT_M>
+    <SCRTEXT_L>容器位置</SCRTEXT_L>
+    <DTELMASTER>1</DTELMASTER>
+    <DATATYPE>NUMC</DATATYPE>
+    <LENG>000002</LENG>
+    <OUTPUTLEN>000002</OUTPUTLEN>
+   </DD04V>
+  </asx:values>
+ </asx:abap>
+</abapGit>

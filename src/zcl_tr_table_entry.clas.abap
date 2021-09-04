@@ -73,10 +73,10 @@ CLASS ZCL_TR_TABLE_ENTRY IMPLEMENTATION.
 
     clear( ).
 
-    IF task IS NOT INITIAL.
-      is_ok = abap_true.
-      RETURN.
-    ENDIF.
+*    IF task IS NOT INITIAL.
+*      is_ok = abap_true.
+*      RETURN.
+*    ENDIF.
 
     CALL FUNCTION 'TRINT_ORDER_CHOICE'
       EXPORTING
@@ -232,16 +232,31 @@ CLASS ZCL_TR_TABLE_ENTRY IMPLEMENTATION.
     ELSE.
       tabname = dynamic_tool->get_table_relative_name( table ).
     ENDIF.
-    DATA(key_fields) = dynamic_tool->get_table_key_fields( tabname ).
+
+    SELECT fieldname, leng, position
+      FROM dd03l
+      INTO TABLE @DATA(lt_fields)
+     WHERE tabname  = @tabname
+       AND as4local = 'A'
+       AND keyflag  = @abap_true
+     ORDER BY fieldname.
+    DELETE ADJACENT DUPLICATES FROM lt_fields COMPARING fieldname.
+    SORT lt_fields ASCENDING BY position.
 
     DATA tabkey TYPE trobj_name.
+    DATA last_length TYPE i.
     LOOP AT table ASSIGNING FIELD-SYMBOL(<table_line>).
 
       CLEAR tabkey.
-      LOOP AT key_fields INTO DATA(key_field).
-        ASSIGN COMPONENT key_field OF STRUCTURE <table_line> TO FIELD-SYMBOL(<field_value>).
+      CLEAR last_length.
+      LOOP AT lt_fields INTO DATA(key_field).
+
+        ASSIGN COMPONENT key_field-fieldname OF STRUCTURE <table_line> TO FIELD-SYMBOL(<field_value>).
         ASSERT sy-subrc = 0.
-        tabkey = tabkey && <field_value>.
+
+        tabkey+last_length = <field_value>.
+        last_length += key_field-leng.
+
       ENDLOOP.
 
       entry( objname = tabname tabkey = tabkey ).

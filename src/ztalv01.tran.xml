@@ -3,22 +3,22 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <TSTC>
-    <TCODE>ZTALV</TCODE>
+    <TCODE>ZTALV01</TCODE>
     <CINFO>Ag==</CINFO>
    </TSTC>
    <TSTCC>
-    <TCODE>ZTALV</TCODE>
+    <TCODE>ZTALV01</TCODE>
     <S_WEBGUI>1</S_WEBGUI>
     <S_WIN32>X</S_WIN32>
     <S_PLATIN>X</S_PLATIN>
    </TSTCC>
    <TSTCT>
     <SPRSL>1</SPRSL>
-    <TCODE>ZTALV</TCODE>
+    <TCODE>ZTALV01</TCODE>
     <TTEXT>TALV类型维护</TTEXT>
    </TSTCT>
    <TSTCP>
-    <TCODE>ZTALV</TCODE>
+    <TCODE>ZTALV01</TCODE>
     <PARAM>/*SM30 UPDATE=X;VIEWNAME=ZTALV_SERVICE;</PARAM>
    </TSTCP>
   </asx:values>
