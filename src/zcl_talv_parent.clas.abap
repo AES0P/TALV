@@ -749,7 +749,7 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
     create_table( ).
 
     "数据传递
-    FIELD-SYMBOLS <alv_table> TYPE STANDARD TABLE.
+    FIELD-SYMBOLS <alv_table> TYPE any.
     ASSIGN grid->outtab->* TO <alv_table>.
 
     MOVE-CORRESPONDING <ref_table> TO <alv_table>.
@@ -1038,9 +1038,9 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
 
       create_table( ).
 
-      RAISE EVENT retrieve.
-
     ENDIF.
+
+    RAISE EVENT retrieve.
 
   ENDMETHOD.
 

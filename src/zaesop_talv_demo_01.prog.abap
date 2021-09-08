@@ -40,12 +40,12 @@ CLASS lcl_this IMPLEMENTATION.
 
 ENDCLASS.
 
-FORM frm_9000_handle_retrieve USING ddic_type TYPE tabname
-                           CHANGING alv_table TYPE STANDARD TABLE.
+FORM frm_9000_handle_retrieve USING pv_ddic_type TYPE tabname
+                           CHANGING ct_alv_table TYPE STANDARD TABLE.
 
   SELECT *
-    FROM (ddic_type)
-    INTO CORRESPONDING FIELDS OF TABLE alv_table
+    FROM (pv_ddic_type)
+    INTO CORRESPONDING FIELDS OF TABLE ct_alv_table
     UP TO 10 ROWS.
 
 ENDFORM.

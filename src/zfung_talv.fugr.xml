@@ -135,6 +135,49 @@
       </RSFDO>
      </DOCUMENTATION>
     </item>
+    <item>
+     <FUNCNAME>ZFM_TALV_MULTIPLE_ADD</FUNCNAME>
+     <SHORT_TEXT>将TALV添加到同屏TALV处理栈</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>TALV</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>REF TO ZCL_TALV_PARENT</TYP>
+       <REF_CLASS>X</REF_CLASS>
+      </RSIMP>
+     </IMPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>TALV</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>TALV</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>ZFM_TALV_MULTIPLE_DISPLAY</FUNCNAME>
+     <SHORT_TEXT>display talv</SHORT_TEXT>
+    </item>
+    <item>
+     <FUNCNAME>ZFM_TALV_MULTIPLE_FREE</FUNCNAME>
+     <SHORT_TEXT>free talv</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>DYNNR</PARAMETER>
+       <DEFAULT>SY-DYNNR</DEFAULT>
+       <OPTIONAL>X</OPTIONAL>
+       <REFERENCE>X</REFERENCE>
+       <TYP>SY-DYNNR</TYP>
+      </RSIMP>
+     </IMPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>DYNNR</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>ABAP 系统字段：当前 Dynpro 编号</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
    </FUNCTIONS>
    <DYNPROS>
     <item>

@@ -98,6 +98,8 @@ CLASS ZCL_TR_TABLE_ENTRY IMPLEMENTATION.
         OTHERS                 = 6.
     IF sy-subrc = 0.
       is_ok = abap_true.
+    ELSE.
+      MESSAGE text-001 TYPE 'S' DISPLAY LIKE 'A'.
     ENDIF.
 
   ENDMETHOD.

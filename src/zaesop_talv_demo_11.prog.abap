@@ -12,8 +12,6 @@ CLASS lcl_this DEFINITION CREATE PUBLIC.
 
   PUBLIC SECTION.
 
-    CLASS-DATA: talvs TYPE REF TO cl_object_collection.
-
     CLASS-DATA: column_row TYPE zstalv_key-container_position VALUE '34'." 3columns * 4rows
 
     CLASS-METHODS main.
@@ -31,15 +29,12 @@ CLASS lcl_this IMPLEMENTATION.
 
   METHOD main.
 
-    CREATE OBJECT talvs.
-
     DATA(columns) = column_row+0(1).
     DATA(rows)    = column_row+1(1).
 
     DATA(splitter) = NEW cl_gui_splitter_container( columns = CONV i( columns )
                                                     rows    = CONV i( rows )
                                                     parent  = NEW cl_gui_custom_container( container_name = 'CON' ) ).
-
     DO columns TIMES.
 
       DATA(column) = sy-index.
@@ -48,32 +43,24 @@ CLASS lcl_this IMPLEMENTATION.
 
         DATA(row) = sy-index.
 
-        "工厂模式生成TALV并直接添加到集合
-        talvs->add( zcl_talv_factory=>get_talv( VALUE #( type                         = 'TALV_CUS'
-                                                         ddic_type                    = 'EKKO'
-                                                         dynnr                        = '9300'
-                                                         checkbox_name                = 'BOX'
-                                                         light_name                   = 'LIGHT'
-                                                         color_table_name             = 'COLOR'
-                                                         style_table_name             = 'STYLE'
-                                                         handle_retrieve              = 'F9300_11_HANDLE_RETRIEVE'
-                                                         handle_top_of_page           = 'F9300_11_HANDLE_TOP_OF_PAGE'
-                                                         handle_on_pbo                = 'F9300_11_HANDLE_ON_PBO'
-                                                         handle_data_changed_finished = 'F9300_11_HANDLE_CHANGED_OVER'
-                                                         handle_hotspot_click         = 'F9300_11_HANDLE_HOTSPOT_CLICK'
-                                                         container_position           = column && row
-                                                         header_height                = 10
-                                                         container                    = splitter->get_container( column = column row = row )  ) ) ).
-
+        zcl_talv_factory=>get_talv( VALUE #( type                         = 'TALV_CUS'
+                                             ddic_type                    = 'EKKO'
+                                             dynnr                        = '9300'
+                                             checkbox_name                = 'BOX'
+                                             light_name                   = 'LIGHT'
+                                             color_table_name             = 'COLOR'
+                                             style_table_name             = 'STYLE'
+                                             handle_retrieve              = 'F9300_11_HANDLE_RETRIEVE'
+                                             handle_top_of_page           = 'F9300_11_HANDLE_TOP_OF_PAGE'
+                                             handle_on_pbo                = 'F9300_11_HANDLE_ON_PBO'
+                                             handle_data_changed_finished = 'F9300_11_HANDLE_CHANGED_OVER'
+                                             handle_hotspot_click         = 'F9300_11_HANDLE_HOTSPOT_CLICK'
+                                             container_position           = column && row
+                                             header_height                = 10
+                                             container                    = splitter->get_container( column = column row = row )  ) ).
       ENDDO.
 
     ENDDO.
-
-    DATA(iterator) = talvs->get_iterator( ).
-
-    WHILE iterator->has_next( ).
-      CAST zcl_talv_parent( iterator->get_next( ) )->display( ).
-    ENDWHILE.
 
     CALL SCREEN 9300.
 
@@ -222,6 +209,8 @@ ENDFORM.
 *&
 *&---------------------------------------------------------------------*
 MODULE status_9300 OUTPUT.
+  "展示
+  CALL FUNCTION 'ZFM_TALV_MULTIPLE_DISPLAY'.
   SET PF-STATUS 'STATUS' OF PROGRAM 'SAPLZFUNG_TALV'.
 ENDMODULE.
 *&---------------------------------------------------------------------*
@@ -231,18 +220,7 @@ ENDMODULE.
 *----------------------------------------------------------------------*
 MODULE user_command_9300 INPUT.
   IF sy-ucomm = '&BACK' OR sy-ucomm = '&EXIT' OR sy-ucomm = '&CANCEL'.
-
-    DATA(iterator) = lcl_this=>talvs->get_iterator( ).
-    WHILE iterator->has_next( ).
-      CAST zcl_talv_parent( iterator->get_next( ) )->free( ).
-    ENDWHILE.
-
-    FREE iterator.
-
-    lcl_this=>talvs->clear( ).
-    FREE lcl_this=>talvs.
-
+    CALL FUNCTION 'ZFM_TALV_MULTIPLE_FREE'.
     LEAVE TO SCREEN 0.
-
   ENDIF.
 ENDMODULE.

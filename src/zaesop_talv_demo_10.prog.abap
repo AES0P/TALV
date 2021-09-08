@@ -29,7 +29,7 @@ CLASS lcl_this IMPLEMENTATION.
 
   METHOD main.
 
-    "工厂模式生成TALV并直接展示
+    "工厂模式生成TALV
     zcl_talv_factory=>get_talv( VALUE #( type               = 'TALV_CUS'
                                          ddic_type          = 'EKKO'
                                          dynnr              = '9000'
@@ -39,7 +39,7 @@ CLASS lcl_this IMPLEMENTATION.
                                          style_table_name   = 'STYLE'
                                          container_position = '01'
                                          header_height      = 28
-                                         container          = NEW cl_gui_custom_container( container_name = 'CON1' ) ) )->display( ).
+                                         container          = NEW cl_gui_custom_container( container_name = 'CON1' ) ) ).
 
     lcl_this=>po_items = zcl_talv_factory=>get_talv( VALUE #( type               = 'TALV_CUS'
                                                               ddic_type          = 'EKPO'
@@ -48,7 +48,6 @@ CLASS lcl_this IMPLEMENTATION.
                                                               container_position = '02'
                                                               header_height      = 6
                                                               container          = NEW cl_gui_custom_container( container_name = 'CON2' ) ) ).
-    lcl_this=>po_items->display( ).
 
     CALL SCREEN 9000.
 
@@ -206,11 +205,8 @@ FORM f9000_01_handle_changed_over USING talv TYPE REF TO zcl_talv_parent
     talv->set_style_for_single_line( index ).
     talv->set_color_for_single_line( index ).
 
-
-
   ENDLOOP.
 
-  talv->refresh( ).
   lcl_this=>po_items->refresh( ).
 
 ENDFORM.
@@ -221,7 +217,11 @@ ENDFORM.
 *&
 *&---------------------------------------------------------------------*
 MODULE status_9000 OUTPUT.
+
+  "展示
+  CALL FUNCTION 'ZFM_TALV_MULTIPLE_DISPLAY'.
   SET PF-STATUS 'STATUS' OF PROGRAM 'SAPLZFUNG_TALV'.
+
 ENDMODULE.
 *&---------------------------------------------------------------------*
 *&      Module  USER_COMMAND_9000  INPUT
@@ -230,7 +230,7 @@ ENDMODULE.
 *----------------------------------------------------------------------*
 MODULE user_command_9000 INPUT.
   IF sy-ucomm = '&BACK' OR sy-ucomm = '&EXIT' OR sy-ucomm = '&CANCEL'.
-    lcl_this=>po_items->free( ).
+    CALL FUNCTION 'ZFM_TALV_MULTIPLE_FREE'.
     LEAVE TO SCREEN 0.
   ENDIF.
 ENDMODULE.

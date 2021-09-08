@@ -111,6 +111,17 @@ FORM frm_9000_handle_set_title.
   SET TITLEBAR 'TITLE'  OF PROGRAM 'SAPLZFUNG_TALV' WITH '数据引用转TALV'.
 ENDFORM.
 
+FORM frm_9000_handle_retrieve USING pv_ddic_type TYPE tabname
+                           CHANGING alv_table    TYPE STANDARD TABLE.
+
+  BREAK-POINT.
+  "参考内表或者参考数据引用的TALV,在查数的时候是有初始值的
+  "但pv_ddic_type没有值
+  "可以选择在此覆盖初始值或对初始值进行加工
+  DELETE alv_table WHERE ('EBELP <> 10').
+
+ENDFORM.
+
 FORM frm_9900_handle_changed_over USING talv TYPE REF TO zcl_talv_parent
                                         pv_modified   TYPE char01
                                         pt_good_cells TYPE lvc_t_modi
