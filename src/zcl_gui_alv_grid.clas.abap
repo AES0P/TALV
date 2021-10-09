@@ -181,8 +181,16 @@ CLASS ZCL_GUI_ALV_GRID IMPLEMENTATION.
          program_error                 = 2
          too_many_lines                = 3
          OTHERS                        = 4 ).
-    IF sy-subrc <> 0.
-    ENDIF.
+    CASE sy-subrc.
+      WHEN 1.
+        MESSAGE a530(0k) RAISING invalid_parameter_combination.
+      WHEN 2.
+        MESSAGE a534(0k) RAISING program_error.
+      WHEN 2.
+        MESSAGE a099(0k) RAISING too_many_lines.
+      WHEN 4.
+        MESSAGE a203(0k) RAISING program_error.
+    ENDCASE.
 
   ENDMETHOD.
 

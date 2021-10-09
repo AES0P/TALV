@@ -84,12 +84,12 @@ FORM frm_9000_handle_retrieve USING pv_ddic_type TYPE tabname
     SELECT (lcl_this=>fields)
       FROM (pv_ddic_type)
       INTO CORRESPONDING FIELDS OF TABLE alv_table
-      UP TO 10 ROWS.
+      UP TO 1000 ROWS.
   ELSE.
     SELECT *
       FROM (pv_ddic_type)
       INTO CORRESPONDING FIELDS OF TABLE alv_table
-      UP TO 10 ROWS.
+      UP TO 1000 ROWS.
   ENDIF.
 
 ENDFORM.
@@ -101,8 +101,6 @@ FORM frm_9000_handle_changed_over USING talv TYPE REF TO zcl_talv_parent
 
   PERFORM frm_9000_set_style USING talv
                           CHANGING alv_table.
-
-  talv->refresh( ).
 
 ENDFORM.
 

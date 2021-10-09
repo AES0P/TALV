@@ -176,7 +176,7 @@ public section.
     importing
       !COLOR_TABLE type LVC_T_SCOL .
   methods CLEAR_LINE_COLOR_TABLE .
-  methods INIT_FIELDCAT .
+  methods INIT_FIELDCAT_BTN_ICON .
   methods IS_INITIALIZED
     returning
       value(INITIALIZED) type ABAP_BOOL .
@@ -427,6 +427,7 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
     fieldcatlog-col_opt = 'A'.
     MODIFY key-fieldcat FROM fieldcatlog TRANSPORTING col_opt WHERE col_opt <> 'A'.
 
+    init_fieldcat_btn_icon( ).
     grid->set_frontend_fieldcatalog( key-fieldcat ).
 
   ENDMETHOD.
@@ -511,7 +512,7 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
 
   METHOD set_style_for_single_line.
 
-    CHECK get_key_info( 'STYLE_TABLE_NAME' ) <> space.
+    CHECK key-style_table_name <> space.
 
     FIELD-SYMBOLS: <table>      TYPE STANDARD TABLE,
                    <table_line> TYPE any,
@@ -522,7 +523,7 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
     READ TABLE <table> ASSIGNING <table_line> INDEX index.
     CHECK <table_line> IS ASSIGNED.
 
-    ASSIGN COMPONENT get_key_info( 'STYLE_TABLE_NAME' ) OF STRUCTURE <table_line> TO <style_tab>.
+    ASSIGN COMPONENT key-style_table_name OF STRUCTURE <table_line> TO <style_tab>.
     CHECK <style_tab> IS ASSIGNED.
 
     <style_tab> = get_style_table( ).
@@ -742,9 +743,8 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
       IF key-fieldcat IS INITIAL."数据引用则必须自己传入fieldcat
         MESSAGE '参考数据引用创建TALV必须同时传入Fieldcat！' TYPE 'E'.
       ENDIF.
+      init_fieldcat_btn_icon( ).
     ENDIF.
-
-    set_fieldcat( key-fieldcat ).
 
     create_table( ).
 
@@ -789,8 +789,6 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
         fieldcat-coltext   = key-light_name.
         APPEND fieldcat TO key-fieldcat.
       ENDIF.
-
-      set_fieldcat( key-fieldcat ).
 
     ENDIF.
 
@@ -1023,9 +1021,6 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
 
     IF key-ref_table_name IS NOT INITIAL OR key-ref_data_name IS NOT INITIAL.
 
-      "直接把程序里的表或者数据引用拿过来，先改造内表字段结构，再传递数据
-      init_fieldcat( ).
-
       copy_table( ).
 
     ELSE.
@@ -1033,8 +1028,6 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
       "直接创建ddic_type类型的内表，同时抛出事件，自行取值
       set_fieldcat( structure_name = key-ddic_type
                     fieldcat       = key-fieldcat ).
-
-      init_fieldcat( ).
 
       create_table( ).
 
@@ -1185,41 +1178,6 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD init_fieldcat.
-
-    CHECK key-fieldcat IS NOT INITIAL.
-
-    IF key-style_table_name IS NOT INITIAL
-      AND key-show_long_text_button = abap_true.
-
-      DATA fieldcat TYPE lvc_s_fcat.
-      DATA: fieldcat_new  TYPE lvc_s_fcat,
-            fieldcats_new TYPE lvc_t_fcat.
-
-      LOOP AT key-fieldcat INTO fieldcat WHERE intlen > 128.
-
-        CLEAR fieldcat_new.
-        fieldcat_new-fieldname = fieldcat-fieldname && '_TBTN'.
-        fieldcat_new-coltext   = '长文本'.
-        fieldcat_new-col_pos   = fieldcat-col_pos.
-        fieldcat_new-icon      = abap_true.
-        APPEND fieldcat_new TO fieldcats_new.
-
-        CLEAR: fieldcat.
-
-      ENDLOOP.
-
-      IF fieldcats_new IS NOT INITIAL.
-        APPEND LINES OF fieldcats_new TO key-fieldcat.
-      ENDIF.
-
-      SORT key-fieldcat BY col_pos.
-
-    ENDIF.
-
-  ENDMETHOD.
-
-
   METHOD init_grid.
 
     IF key-container IS NOT BOUND.
@@ -1359,6 +1317,47 @@ CLASS ZCL_TALV_PARENT IMPLEMENTATION.
        AND obj_id             = '0'.
 
     layout_setting = me->layout_setting.
+
+  ENDMETHOD.
+
+
+  METHOD init_fieldcat_btn_icon.
+
+    ASSERT key-fieldcat IS NOT INITIAL.
+
+    IF key-style_table_name IS NOT INITIAL
+      AND key-show_long_text_button = abap_true.
+
+      DATA fieldcat TYPE lvc_s_fcat.
+      DATA: fieldcat_new  TYPE lvc_s_fcat,
+            fieldcats_new TYPE lvc_t_fcat.
+
+      LOOP AT key-fieldcat INTO fieldcat WHERE intlen > 128.
+
+        CLEAR fieldcat_new.
+        fieldcat_new-fieldname = fieldcat-fieldname && '_TBTN'.
+
+        READ TABLE key-fieldcat TRANSPORTING NO FIELDS WITH KEY fieldname = fieldcat_new-fieldname.
+        IF sy-subrc = 0.
+          CONTINUE.
+        ENDIF.
+
+        fieldcat_new-coltext   = '长文本'.
+        fieldcat_new-col_pos   = fieldcat-col_pos.
+        fieldcat_new-icon      = abap_true.
+        APPEND fieldcat_new TO fieldcats_new.
+
+        CLEAR: fieldcat.
+
+      ENDLOOP.
+
+      IF fieldcats_new IS NOT INITIAL.
+        APPEND LINES OF fieldcats_new TO key-fieldcat.
+        SORT key-fieldcat BY col_pos.
+      ENDIF.
+
+
+    ENDIF.
 
   ENDMETHOD.
 ENDCLASS.

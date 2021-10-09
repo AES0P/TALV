@@ -1182,14 +1182,18 @@ CLASS ZCL_DYNAMIC_TOOL IMPLEMENTATION.
 
         tabledescr = cl_abap_tabledescr=>create( p_line_type = structdescr p_table_kind = cl_abap_tabledescr=>tablekind_std ).
 
-        DATA ep_table TYPE REF TO data.
-        CREATE DATA ep_table TYPE HANDLE tabledescr.
+        "20210913 comments
+*        DATA ep_table TYPE REF TO data.
+*        CREATE DATA ep_table TYPE HANDLE tabledescr.
+        CREATE DATA table TYPE HANDLE tabledescr.
 
       CATCH cx_root INTO lx_root.
         MESSAGE x000(0k) WITH lx_root->get_text( ) space space space.
     ENDTRY.
 
-    CALL METHOD (class_name)=>(class_method) EXPORTING ip_table = ep_table.
+    "20210913 comments
+*    CALL METHOD (class_name)=>(class_method) EXPORTING ip_table = ep_table.
+
 
   ENDMETHOD.
 ENDCLASS.
